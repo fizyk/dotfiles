@@ -6,6 +6,8 @@ curl https://pyenv.run | bash
 
 pyenv update
 
+echo "Install lazydocker"
+curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 
 
 COMPOSE_VERSION = "1.27.4"
