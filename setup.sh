@@ -1,6 +1,11 @@
 #!/bin/bash
 
 
+echo "Install pyenv"
+curl https://pyenv.run | bash
+
+pyenv update
+
 
 
 COMPOSE_VERSION = "1.27.4"
@@ -11,4 +16,3 @@ sudo curl -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSI
 sudo chmod +x /usr/local/bin/docker-compose
 
 echo "Installed"
-
