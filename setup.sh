@@ -20,3 +20,12 @@ sudo chmod +x /usr/local/bin/docker-compose
 which docker-composet
 
 echo "Installed"
+
+
+echo "Configure git"
+echo "Set git attributes"
+# Based on https://tekin.co.uk/2020/10/better-git-diff-output-for-ruby-python-elixir-and-more
+# Existing diffs https://github.com/git/git/blob/master/userdiff.c
+cp .gitattributes ~/.gitattributes
+git config --global core.attributesfile ~/.gitattributes
+echo "Git configuration completed"
