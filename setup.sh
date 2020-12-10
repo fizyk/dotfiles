@@ -28,4 +28,5 @@ echo "Set git attributes"
 # Existing diffs https://github.com/git/git/blob/master/userdiff.c
 cp .gitattributes ~/.gitattributes
 git config --global core.attributesfile ~/.gitattributes
+git config --global alias.cleanup "!git branch --merged | grep  -v '\\*\\|master\\|dev' | xargs -n 1 git branch -d"
 echo "Git configuration completed"
