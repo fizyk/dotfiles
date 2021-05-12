@@ -11,6 +11,10 @@ echo "Install lazydocker"
 curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 which lazydocker
 
+echo "Install golangci-lint"
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.39.0
+which golangci-lint
+
 COMPOSE_VERSION="1.27.4"
 echo "Installing docker-compose $COMPOSE_VERSION"
 
