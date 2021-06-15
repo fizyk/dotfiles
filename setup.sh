@@ -1,11 +1,12 @@
 #!/bin/bash
 
 
-
 if ! dpkg --get-selections | grep -q "^curl[[:space:]]*install$" >/dev/null; then
     echo "cURL not installed, installing..."
     sudo apt install curl
 fi
+
+./setup-zsh.sh
 
 echo "Install pyenv"
 curl https://pyenv.run | bash
