@@ -15,8 +15,15 @@ sudo tar -C /usr/local -xzf "go$GOLANG_VERSION.linux-amd64.tar.gz"
 
 if ! grep -Fxq 'export PATH=$PATH:/usr/local/go/bin' "$ZSHRC_FILE"
 then
-    echo '# Golang configuration'
+    echo '# Golang configuration' >> $ZSHRC_FILE
     echo 'export PATH=$PATH:/usr/local/go/bin' >> $ZSHRC_FILE
+    echo 'export GO111MODULE=on' >> $ZSHRC_FILE
+    echo 'export GOPATH=$HOME/go' >> $ZSHRC_FILE
+    echo 'export PATH=$GOPATH/bin:$PATH' >> $ZSHRC_FILE
 fi
 
 /usr/local/go/bin/go version
+
+echo "Install golangci-lint"
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(/usr/local/go/bin/go env GOPATH)/bin v1.39.0
+which golangci-lint

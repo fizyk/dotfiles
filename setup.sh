@@ -9,10 +9,8 @@ fi
 ./setup-zsh.sh
 ./setup-pyenv.sh
 ./setup-docker.sh
-# TODO: install golang if not exists
-echo "Install golangci-lint"
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.39.0
-which golangci-lint
+
+./setup-go.sh
 
 
 echo "Installed"
