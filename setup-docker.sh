@@ -19,6 +19,11 @@ if ! dpkg --get-selections | grep -q "^docker-ce[[:space:]]*install$" >/dev/null
     sudo apt install -y docker-ce docker-ce-cli containerd.io
 fi
 
+usermod -a -G docker $USER
+newgroup docker
+# Assume primary group is same as user's username
+newgroup $USER
+
 echo "Install lazydocker"
 # https://github.com/jesseduffield/lazydocker
 curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash

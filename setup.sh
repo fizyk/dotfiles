@@ -7,22 +7,7 @@ if ! dpkg --get-selections | grep -q "^curl[[:space:]]*install$" >/dev/null; the
 fi
 
 ./setup-zsh.sh
-
-if [ -d "$HOME/.pyenv/" ]; then
-    pyenv update
-    echo "Oh-My-Zsh installed, run omz update in terminal"
-else
-    echo "Install pyenv"
-    curl https://pyenv.run | bash
-fi
-
-if ! grep -Fxq 'eval "$(pyenv init -)"' "$HOME/.zshrc"
-then
-    echo "Configuring pyenv for zsh"
-    echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-fi
-which pyenv
-
+./setup-pyenv.sh
 ./setup-docker.sh
 # TODO: install golang if not exists
 echo "Install golangci-lint"
