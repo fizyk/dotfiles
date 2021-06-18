@@ -23,7 +23,3 @@ then
 fi
 
 /usr/local/go/bin/go version
-
-echo "Install golangci-lint"
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(/usr/local/go/bin/go env GOPATH)/bin v1.39.0
-which golangci-lint
