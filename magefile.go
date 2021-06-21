@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"time"
 )
 
 const versionRegexp string = "([\\d]+\\.[\\d]+(\\.[\\d]+)?)"
@@ -21,14 +22,14 @@ func Hello() {
 
 // Installs golangci-lint
 func EnsureGolangCILint() error {
-	// TODO: measure time of the installation
+	defer measureTime(time.Now(), "ensureGolangCILint")
 	installVersion, _ := version.NewVersion("v1.41.0")
 	fmt.Println("Start")
 	gopath := os.Getenv("GOPATH")
 	existingVersion, error := golangCIVersion()
 	if error == nil {
 		if existingVersion.Equal(installVersion) {
-			fmt.Printf("GolangCI-Lint %s already installed", installVersion.String())
+			fmt.Printf("GolangCI-Lint %s already installed\n", installVersion.String())
 			return nil
 		}
 	}
@@ -45,12 +46,17 @@ func EnsureGolangCILint() error {
 		if existingVersion == nil {
 			fmt.Printf("installed at version %s\n", newlyInstalledVersion.String())
 		} else if existingVersion.GreaterThan(newlyInstalledVersion) {
-			fmt.Printf("downgraded from %s to %s", existingVersion.String(), newlyInstalledVersion.String())
+			fmt.Printf("downgraded from %s to %s\n", existingVersion.String(), newlyInstalledVersion.String())
 		} else {
-			fmt.Printf("upgraded from %s to %s", existingVersion.String(), newlyInstalledVersion.String())
+			fmt.Printf("upgraded from %s to %s\n", existingVersion.String(), newlyInstalledVersion.String())
 		}
 	}
 	return nil
+}
+
+func measureTime(start time.Time, banner string) {
+	end := time.Now()
+	fmt.Printf("%s took %.2f seconds\n", banner, end.Sub(start).Seconds())
 }
 
 func golangCIVersion() (*version.Version, error) {
