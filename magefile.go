@@ -4,11 +4,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/hashicorp/go-version"
 	"github.com/magefile/mage/sh"
 	"io"
 	"os"
 	"os/exec"
+	"regexp"
 )
+
+const versionRegexp string = "([\\d]+\\.[\\d]+(\\.[\\d]+)?)"
 
 // Hello is a sample hello mage target
 func Hello() {
@@ -17,33 +21,63 @@ func Hello() {
 
 // Installs golangci-lint
 func EnsureGolangCILint() error {
-	// TODO: Pass version as a parameter
-	// TODO: if version is already installed, do not install, print it's installed
-	// TODO: Check what's the newest version if not passed and install newest version then (which check if installed)
 	// TODO: measure time of the installation
+	installVersion, _ := version.NewVersion("v1.41.0")
 	fmt.Println("Start")
-	sh.RunV("pwd")
-	//gopath, _ := sh.Output("go", "env", "GOPATH")
 	gopath := os.Getenv("GOPATH")
-	fmt.Println(gopath)
-	// TODO: Have structs for commands and args
-	c1 := exec.Command("curl", "-sSfL", "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh")
-	c2 := exec.Command("sh", "-s", "--", "-b", fmt.Sprintf("%s/bin", gopath), "v1.41.0")
-	r, w := io.Pipe()
-	c1.Stdout = w
-	c2.Stdin = r
-	c1.Start()
-	c2.Start()
-	c1.Wait()
-	w.Close()
-	c2.Wait()
-	fmt.Println("End")
-	version, error := sh.Output("golangci-lint", "version")
-	if error != nil {
-		return error
+	existingVersion, error := golangCIVersion()
+	if error == nil {
+		if existingVersion.Equal(installVersion) {
+			fmt.Printf("GolangCI-Lint %s already installed", installVersion.String())
+			return nil
+		}
 	}
-	// TODO: If updated, print it's updated
-	fmt.Println("Installed golangci-lint!")
-	fmt.Println(version)
+
+	c1 := exec.Command("curl", "-sSfL", "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh")
+	c2 := exec.Command("sh", "-s", "--", "-b", fmt.Sprintf("%s/bin", gopath), fmt.Sprintf("v%s", installVersion.String()))
+	runCommandAndPipe(c1, c2)
+
+
+	if newlyInstalledVersion, error := golangCIVersion(); error != nil {
+		return error
+	} else {
+		fmt.Print("GolangCI-Lint got ")
+		if existingVersion == nil {
+			fmt.Printf("installed at version %s\n", newlyInstalledVersion.String())
+		} else if existingVersion.GreaterThan(newlyInstalledVersion) {
+			fmt.Printf("downgraded from %s to %s", existingVersion.String(), newlyInstalledVersion.String())
+		} else {
+			fmt.Printf("upgraded from %s to %s", existingVersion.String(), newlyInstalledVersion.String())
+		}
+	}
 	return nil
+}
+
+func golangCIVersion() (*version.Version, error) {
+	versionOutput, error := sh.Output("golangci-lint", "version")
+	if error != nil {
+		return nil, error
+	}
+	versionRegexp := regexp.MustCompile(versionRegexp)
+	matchedVersion := versionRegexp.FindString(versionOutput)
+	return version.NewVersion(matchedVersion)
+}
+
+// runCommandAndPipe runs first command and pipes it's output to second one
+func runCommandAndPipe(mainCommand *exec.Cmd, pipeToCommand *exec.Cmd) {
+	fmt.Printf("%s | %s \n", mainCommand.String(), pipeToCommand.String())
+	read, write := io.Pipe()
+	// Main command will write
+	mainCommand.Stdout = write
+
+	// pipeCommand will read
+	pipeToCommand.Stdin = read
+	mainCommand.Start()
+	pipeToCommand.Start()
+	// Wait for the mainCommand to finish
+	mainCommand.Wait()
+	// Close write io
+	write.Close()
+	// Wait for the pipeCommand to finish
+	pipeToCommand.Wait()
 }
