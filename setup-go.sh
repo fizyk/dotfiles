@@ -4,7 +4,7 @@ echo "Installing and configuring golang $GOLANG_VERSION"
 
 if ! [ -f "go$GOLANG_VERSION.linux-amd64.tar.gz" ]; then
     echo "Download golang $GOLANG_VERSION"
-    wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz
+    wget "https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz"
 fi
 
 if [ -d /usr/local/go ]; then

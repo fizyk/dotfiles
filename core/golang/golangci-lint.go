@@ -2,19 +2,17 @@ package golang
 
 import (
 	"fmt"
-	"github.com/fizyk/dotfiles/core"
 	"github.com/fizyk/dotfiles/core/command"
 	"github.com/hashicorp/go-version"
 	"github.com/magefile/mage/sh"
 	"os"
 	"os/exec"
 	"regexp"
-	"time"
 )
 
 const versionRegexp string = "([\\d]+\\.[\\d]+(\\.[\\d]+)?)"
 
-// Parse golangci-lint version
+// golangCIVersion Parse golangci-lint version
 func golangCIVersion() (*version.Version, error) {
 	versionOutput, error := sh.Output("golangci-lint", "version")
 	if error != nil {
@@ -25,9 +23,8 @@ func golangCIVersion() (*version.Version, error) {
 	return version.NewVersion(matchedVersion)
 }
 
-// Installs golangci-lint
+// EnsureGolangCILint Installs golangci-lint
 func EnsureGolangCILint(newVersion string) error {
-	defer core.MeasureTime(time.Now(), "ensureGolangCILint")
 	installVersion, _ := version.NewVersion(newVersion)
 	fmt.Println("Start")
 	gopath := os.Getenv("GOPATH")
