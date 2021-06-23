@@ -10,6 +10,7 @@ import (
 
 const dockerAptFile string = "/etc/apt/sources.list.d/docker.list"
 
+// InstallDocker actually installs docker given that the apt repository is prepared
 func InstallDocker() error {
 	if _, err := os.Stat(dockerAptFile); errors.Is(err, os.ErrNotExist) {
 		releaseOutput, err := sh.Output("lsb_release", "-cs")

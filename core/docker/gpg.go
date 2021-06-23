@@ -13,6 +13,7 @@ const dockerAptPGPKeyfile string = "/usr/share/keyrings/docker-archive-keyring.g
 const dockerAptPGPKeyUri string = "https://download.docker.com/linux/ubuntu/gpg"
 const rawPGPKeyFile string = "docker_apt_key_raw.gpg"
 
+// PGP Downloads and installs PGP key for docker apt repository
 func PGP() error {
 	if _, err := os.Stat(dockerAptPGPKeyfile); errors.Is(err, os.ErrNotExist) {
 		// Download PGP file if not downloaded
