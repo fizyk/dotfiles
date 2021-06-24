@@ -1,4 +1,4 @@
-name: Go lint and format
+name: Go test
 
 on:
   push:
@@ -22,4 +22,4 @@ jobs:
         uses: magefile/mage-action@v1
         with:
           version: latest
-          args: go:check:format
+          args: go:test
