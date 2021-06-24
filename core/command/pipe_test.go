@@ -19,5 +19,5 @@ func (s *pipeSuite) Test_Stdout() {
 	pipeToCommand := exec.Command("wc", "-l")
 	stdout, stderr := PipeCommands(pipeFromCommand, pipeToCommand)
 	s.Empty(stderr.String())
-	s.Equal("0", stdout.String())
+	s.Equal("0\n", stdout.String())
 }
