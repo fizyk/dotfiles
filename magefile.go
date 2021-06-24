@@ -11,6 +11,8 @@ import (
 
 	// mage:import go
 	_ "github.com/fizyk/dotfiles/targets/golang"
+	// mage:import go:check
+	_ "github.com/fizyk/dotfiles/targets/golang/check"
 	// mage:import docker
 	_ "github.com/fizyk/dotfiles/targets/docker"
 	"time"
@@ -33,4 +35,3 @@ func EnsureGolangCILint() error {
 	defer core.MeasureTime(time.Now(), "ensureGolangCILint")
 	return golang.EnsureGolangCILint("1.41.0")
 }
-
