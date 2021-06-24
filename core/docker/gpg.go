@@ -3,8 +3,7 @@ package docker
 import (
 	"errors"
 	"github.com/fizyk/dotfiles/core/command"
-	"io/ioutil"
-	"net/http"
+	"github.com/fizyk/dotfiles/core/file"
 	"os"
 	"os/exec"
 )
@@ -18,15 +17,7 @@ func PGP() error {
 	if _, err := os.Stat(dockerAptPGPKeyfile); errors.Is(err, os.ErrNotExist) {
 		// Download PGP file if not downloaded
 		if _, err := os.Stat(rawPGPKeyFile); errors.Is(err, os.ErrNotExist) {
-			resp, err := http.Get(dockerAptPGPKeyUri)
-			if err != nil {
-				return err
-			}
-			defer resp.Body.Close()
-			if body, err := ioutil.ReadAll(resp.Body); err != nil {
-				return err
-				// Write downloaded file locally
-			} else if err := ioutil.WriteFile(rawPGPKeyFile, body, 0644); err != nil {
+			if err := file.DownloadFile(dockerAptPGPKeyUri, rawPGPKeyFile); err != nil {
 				return err
 			}
 		}

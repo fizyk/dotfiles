@@ -14,5 +14,5 @@ func Tidy() {
 
 // Test run tests for go code
 func Test() {
-	sh.RunV("go", "test", "./...")
+	sh.RunV("go", "test", "-race", "-coverpkg", "./...", "-coverprofile=coverage.txt", "-covermode=atomic", "./...")
 }

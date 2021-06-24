@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-
 func hasDocker(groups string, searchGroup string) bool {
 	groupList := strings.Split(groups, " ")
 	for _, group := range groupList {

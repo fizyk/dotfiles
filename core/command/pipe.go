@@ -1,13 +1,14 @@
 package command
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os/exec"
 )
 
 // PipeCommands runs first command and pipes it's output to second one
-func PipeCommands(mainCommand *exec.Cmd, pipeToCommand *exec.Cmd) {
+func PipeCommands(mainCommand *exec.Cmd, pipeToCommand *exec.Cmd) (stdout bytes.Buffer, stderr bytes.Buffer) {
 	fmt.Printf("%s | %s \n", mainCommand.String(), pipeToCommand.String())
 	read, write := io.Pipe()
 	// Main command will write
@@ -15,6 +16,8 @@ func PipeCommands(mainCommand *exec.Cmd, pipeToCommand *exec.Cmd) {
 
 	// pipeCommand will read
 	pipeToCommand.Stdin = read
+	pipeToCommand.Stdout = &stdout
+	pipeToCommand.Stderr = &stderr
 	mainCommand.Start()
 	pipeToCommand.Start()
 	// Wait for the mainCommand to finish
@@ -23,4 +26,5 @@ func PipeCommands(mainCommand *exec.Cmd, pipeToCommand *exec.Cmd) {
 	write.Close()
 	// Wait for the pipeCommand to finish
 	pipeToCommand.Wait()
+	return
 }
