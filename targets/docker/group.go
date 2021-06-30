@@ -2,7 +2,7 @@ package docker
 
 import (
 	"fmt"
-	"github.com/fizyk/dotfiles/core"
+	magexTime "github.com/fizyk/magex/time"
 	"github.com/magefile/mage/sh"
 	"strings"
 	"time"
@@ -20,7 +20,7 @@ func hasDocker(groups string, searchGroup string) bool {
 
 // Group makes sure user is already in a docker group
 func Group() error {
-	defer core.MeasureTime(time.Now(), "docker:group")
+	defer magexTime.MeasureTime(time.Now(), "docker:group")
 	if groups, err := sh.Output("groups"); err != nil {
 		return err
 	} else if hasDocker(groups, "docker") {

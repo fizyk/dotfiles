@@ -2,8 +2,8 @@ package docker
 
 import (
 	"errors"
-	"github.com/fizyk/dotfiles/core/command"
-	"github.com/fizyk/dotfiles/core/http"
+	"github.com/fizyk/magex/command"
+	"github.com/fizyk/magex/http"
 	"os"
 	"os/exec"
 )

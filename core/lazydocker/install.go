@@ -3,8 +3,8 @@ package lazydocker
 import (
 	"errors"
 	"fmt"
-	"github.com/fizyk/dotfiles/core/github"
-	"github.com/fizyk/dotfiles/core/http"
+	"github.com/fizyk/magex/github"
+	"github.com/fizyk/magex/http"
 	"github.com/hashicorp/go-version"
 	"github.com/magefile/mage/sh"
 	"os"

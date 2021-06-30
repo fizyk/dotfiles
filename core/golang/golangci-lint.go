@@ -2,7 +2,7 @@ package golang
 
 import (
 	"fmt"
-	"github.com/fizyk/dotfiles/core/command"
+	"github.com/fizyk/magex/command"
 	"github.com/hashicorp/go-version"
 	"github.com/magefile/mage/sh"
 	"os"
