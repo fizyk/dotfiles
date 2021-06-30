@@ -1,9 +1,9 @@
-package file
+package http
 
 import (
 	"bytes"
 	"errors"
-	"github.com/segmentio/ksuid"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
 	"net/http"
@@ -23,7 +23,8 @@ type MockClient struct {
 	MockGet MockGetType
 }
 
-// Overriding what the Do function should "do" in our MockClient
+// Overriding what the Do function should "get" in our MockClient
+// Source: https://levelup.gitconnected.com/mocking-outbound-http-calls-in-golang-9e5a044c2555
 func (m *MockClient) Get(url string) (*http.Response, error) {
 	return m.MockGet(url)
 }
@@ -41,8 +42,8 @@ func removeFile(fileName string) error {
 
 func (s *httpSuite) TestCreateFile() {
 	// create a new reader with that JSON
-	var output string = ksuid.New().String()
-	var fileName string = "file.test"
+	var output string = uuid.NewString()
+	var fileName string = "http.test"
 	r := ioutil.NopCloser(bytes.NewReader([]byte(output)))
 	Client = &MockClient{
 		MockGet: func(uri string) (*http.Response, error) {

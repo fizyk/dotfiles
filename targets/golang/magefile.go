@@ -7,7 +7,7 @@ func Format() {
 	sh.RunV("go", "fmt", "./...")
 }
 
-// Tidy tidies go.mod file
+// Tidy tidies go.mod http
 func Tidy() {
 	sh.RunV("go", "mod", "tidy")
 }

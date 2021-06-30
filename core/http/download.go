@@ -1,24 +1,9 @@
-package file
+package http
 
 import (
 	"io/ioutil"
 	"net/http"
 )
-
-func DownloadFile(uri, filename string) error {
-	resp, err := Client.Get(uri)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	if body, err := ioutil.ReadAll(resp.Body); err != nil {
-		return err
-		// Write downloaded file locally
-	} else if err := ioutil.WriteFile(filename, body, 0644); err != nil {
-		return err
-	}
-	return nil
-}
 
 // HTTPClient interface
 type HTTPClient interface {
@@ -31,4 +16,19 @@ var (
 
 func init() {
 	Client = &http.Client{}
+}
+
+func DownloadFile(uri, filename string) error {
+	resp, err := Client.Get(uri)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if body, err := ioutil.ReadAll(resp.Body); err != nil {
+		return err
+		// Write downloaded http locally
+	} else if err := ioutil.WriteFile(filename, body, 0644); err != nil {
+		return err
+	}
+	return nil
 }

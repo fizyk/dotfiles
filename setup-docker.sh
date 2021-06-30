@@ -1,8 +1,3 @@
-echo "Install lazydocker"
-# https://github.com/jesseduffield/lazydocker
-curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-which lazydocker
-
 COMPOSE_VERSION="1.27.4"
 echo "Installing docker-compose $COMPOSE_VERSION"
 
