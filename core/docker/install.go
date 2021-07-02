@@ -1,18 +1,17 @@
 package docker
 
 import (
-	"errors"
 	"fmt"
+	"github.com/fizyk/magex/file"
 	"github.com/magefile/mage/sh"
 	"io/ioutil"
-	"os"
 )
 
 const dockerAptFile string = "/etc/apt/sources.list.d/docker.list"
 
 // InstallDocker actually installs docker given that the apt repository is prepared
 func InstallDocker() error {
-	if _, err := os.Stat(dockerAptFile); errors.Is(err, os.ErrNotExist) {
+	if !file.Exists(dockerAptFile) {
 		releaseOutput, err := sh.Output("lsb_release", "-cs")
 		if err != nil {
 			return err

@@ -4,23 +4,23 @@ package main
 
 import (
 	"fmt"
-	"github.com/fizyk/dotfiles/core"
 	"github.com/fizyk/dotfiles/core/golang"
 	"github.com/fizyk/dotfiles/targets/docker"
 	"github.com/fizyk/dotfiles/targets/docker/lazydocker"
+	magexTime "github.com/fizyk/magex/time"
 	"github.com/magefile/mage/mg"
 	"runtime"
 	"strings"
+	"time"
 
 	// mage:import go
-	_ "github.com/fizyk/dotfiles/targets/golang"
+	_ "github.com/fizyk/magex/magefiles/golang"
 	// mage:import go:check
-	_ "github.com/fizyk/dotfiles/targets/golang/check"
+	_ "github.com/fizyk/magex/magefiles/golang/check"
 	// mage:import docker
 	_ "github.com/fizyk/dotfiles/targets/docker"
 	// mage:import docker:lazy
 	_ "github.com/fizyk/dotfiles/targets/docker/lazydocker"
-	"time"
 )
 
 // Hello is a sample hello mage target
@@ -32,7 +32,7 @@ func Hello() error {
 
 // Installs all required programs
 func Install() {
-	defer core.MeasureTime(time.Now(), "install")
+	defer magexTime.MeasureTime(time.Now(), "install")
 	mg.Deps(EnsureGolangCILint, docker.Install)
 	//mg.Deps(docker.Install)
 	mg.Deps(lazydocker.Install)
@@ -40,6 +40,6 @@ func Install() {
 
 // Installs golangci-lint
 func EnsureGolangCILint() error {
-	defer core.MeasureTime(time.Now(), "ensureGolangCILint")
+	defer magexTime.MeasureTime(time.Now(), "ensureGolangCILint")
 	return golang.EnsureGolangCILint("1.41.0")
 }
