@@ -1,8 +1,8 @@
 package lazydocker
 
 import (
-	"errors"
 	"fmt"
+	"github.com/fizyk/magex/file"
 	"github.com/fizyk/magex/github"
 	"github.com/fizyk/magex/http"
 	"github.com/hashicorp/go-version"
@@ -53,10 +53,7 @@ func lazydockerVersion() (*version.Version, error) {
 
 // isInstalled checks whether lazydocker is installed within system
 func isInstalled() bool {
-	if _, err := os.Stat(fmt.Sprintf("%s/%s", binPath, exec)); errors.Is(err, os.ErrNotExist) {
-		return false
-	}
-	return true
+	return file.Exists(fmt.Sprintf("%s/%s", binPath, exec))
 }
 
 // Install performs all steps that lazydocker's shell script would perform.

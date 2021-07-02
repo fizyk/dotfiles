@@ -14,9 +14,9 @@ import (
 	"time"
 
 	// mage:import go
-	_ "github.com/fizyk/dotfiles/targets/golang"
+	_ "github.com/fizyk/magex/magefiles/golang"
 	// mage:import go:check
-	_ "github.com/fizyk/dotfiles/targets/golang/check"
+	_ "github.com/fizyk/magex/magefiles/golang/check"
 	// mage:import docker
 	_ "github.com/fizyk/dotfiles/targets/docker"
 	// mage:import docker:lazy

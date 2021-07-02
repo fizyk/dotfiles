@@ -2,6 +2,8 @@ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fizyk/magex v0.0.0-20210630142906-d2463a26203d h1:twi0YMy5w3mG1HCTDMHQUlNrOSyl7BQ3DEsjVVqtLwc=
 github.com/fizyk/magex v0.0.0-20210630142906-d2463a26203d/go.mod h1:IrvFQTM/VOgTFA6bvRHnCH02XnCS5WxzhJ4x89MhXrk=
+github.com/fizyk/magex v0.1.0 h1:Fjax5ctEP9jakZuOfDGAXVogYG8hugxESer/lfANmlE=
+github.com/fizyk/magex v0.1.0/go.mod h1:2zrp+ejSSyO5B0s9+YHLW4rkZQrRsmTpg77XzjM1EFc=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/go-cmp v0.5.6 h1:BKbKCqvP6I+rmFHt06ZmyQtvB8xAkWdhFyr0ZUNZcxQ=
 github.com/google/go-cmp v0.5.6/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=

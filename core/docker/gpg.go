@@ -1,10 +1,9 @@
 package docker
 
 import (
-	"errors"
 	"github.com/fizyk/magex/command"
+	"github.com/fizyk/magex/file"
 	"github.com/fizyk/magex/http"
-	"os"
 	"os/exec"
 )
 
@@ -14,9 +13,9 @@ const rawPGPKeyFile string = "docker_apt_key_raw.gpg"
 
 // PGP Downloads and installs PGP key for docker apt repository
 func PGP() error {
-	if _, err := os.Stat(dockerAptPGPKeyfile); errors.Is(err, os.ErrNotExist) {
+	if !file.Exists(dockerAptPGPKeyUri) {
 		// Download PGP file if not downloaded
-		if _, err := os.Stat(rawPGPKeyFile); errors.Is(err, os.ErrNotExist) {
+		if !file.Exists(rawPGPKeyFile) {
 			if err := http.DownloadFile(dockerAptPGPKeyUri, rawPGPKeyFile); err != nil {
 				return err
 			}
