@@ -7,6 +7,7 @@ import (
 	"github.com/fizyk/dotfiles/core/golang"
 	"github.com/fizyk/dotfiles/targets/docker"
 	"github.com/fizyk/dotfiles/targets/docker/lazydocker"
+	"github.com/fizyk/magex/magefiles/mage"
 	magexTime "github.com/fizyk/magex/time"
 	"github.com/magefile/mage/mg"
 	"runtime"
@@ -21,6 +22,8 @@ import (
 	_ "github.com/fizyk/dotfiles/targets/docker"
 	// mage:import docker:lazy
 	_ "github.com/fizyk/dotfiles/targets/docker/lazydocker"
+	// mage:import mage
+	_ "github.com/fizyk/magex/magefiles/mage"
 )
 
 // Hello is a sample hello mage target
@@ -33,7 +36,7 @@ func Hello() error {
 // Installs all required programs
 func Install() {
 	defer magexTime.MeasureTime(time.Now(), "install")
-	mg.Deps(EnsureGolangCILint, docker.Install)
+	mg.Deps(EnsureGolangCILint, docker.Install, mage.Install)
 	//mg.Deps(docker.Install)
 	mg.Deps(lazydocker.Install)
 }

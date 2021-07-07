@@ -10,7 +10,7 @@ Personal dotfiles and system tools installation scripts
 
 2. Install mage:
 
-        setup-mage.sh
+        go run main.go install:mage
 
 
 
