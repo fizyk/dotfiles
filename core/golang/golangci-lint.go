@@ -10,7 +10,7 @@ import (
 	"regexp"
 )
 
-const versionPattern string = "([\\d]+\\.[\\d]+(\\.[\\d]+)?)"
+const versionPatternGolangCI string = "([\\d]+\\.[\\d]+(\\.[\\d]+)?)"
 
 // golangCIVersion Parse golangci-lint version
 func golangCIVersion() (*version.Version, error) {
@@ -18,7 +18,7 @@ func golangCIVersion() (*version.Version, error) {
 	if error != nil {
 		return nil, error
 	}
-	versionRegexp := regexp.MustCompile(versionPattern)
+	versionRegexp := regexp.MustCompile(versionPatternGolangCI)
 	matchedVersion := versionRegexp.FindString(versionOutput)
 	return version.NewVersion(matchedVersion)
 }
