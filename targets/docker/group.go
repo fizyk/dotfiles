@@ -29,10 +29,10 @@ func Group() error {
 		if err := sh.Run("sudo", "usermod", "-a", "-G", "docker", "$USER"); err != nil {
 			return err
 		}
-		if err := sh.Run("newgroup", "docker"); err != nil {
+		if err := sh.Run("newgrp", "docker"); err != nil {
 			return err
 		}
-		if err := sh.Run("newgroup", "$USER"); err != nil {
+		if err := sh.Run("newgrp", "$USER"); err != nil {
 			return err
 		}
 	}
