@@ -9,8 +9,8 @@ github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25Kn
 github.com/fatih/color v1.10.0/go.mod h1:ELkj/draVOlAH/xkhN6mQ50Qd0MPOk5AAr3maGEBuJM=
 github.com/fatih/color v1.13.0 h1:8LOYc1KYPPmyKMuN8QV2DNRWNbLo6LZ0iLs8+mlH53w=
 github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYFFOfk=
-github.com/fizyk/magex v0.1.4 h1:fJvSVZye2YEst3qu+9XFZQHxWfql4yTeZrIzGbo/OHs=
-github.com/fizyk/magex v0.1.4/go.mod h1:Zcv5RN0v1BuyjiI6dk+wRXg3LE/WWHq5HornBF7ObkY=
+github.com/fizyk/magex v0.1.5 h1:t79j7VZoOF0m0RASEsHk5EYtLKTxg8YPFDi5nTdT12E=
+github.com/fizyk/magex v0.1.5/go.mod h1:Zcv5RN0v1BuyjiI6dk+wRXg3LE/WWHq5HornBF7ObkY=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.6 h1:BKbKCqvP6I+rmFHt06ZmyQtvB8xAkWdhFyr0ZUNZcxQ=
