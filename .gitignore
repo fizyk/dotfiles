@@ -3,3 +3,5 @@
 *.gpg
 
 coverage.txt
+# executable
+dotfiles.run
