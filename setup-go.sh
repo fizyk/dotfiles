@@ -1,4 +1,4 @@
-GOLANG_VERSION="1.17.1"
+GOLANG_VERSION="1.19.2"
 ZSHRC_FILE="$HOME/.zshrc"
 echo "Installing and configuring golang $GOLANG_VERSION"
 
