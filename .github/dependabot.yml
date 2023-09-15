@@ -6,7 +6,7 @@ updates:
     interval: daily
     time: "04:00"
   open-pull-requests-limit: 1
-- package-ecosystem: go
+- package-ecosystem: gomod
   directory: "/"
   schedule:
     interval: daily
