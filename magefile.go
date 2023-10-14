@@ -31,7 +31,8 @@ import (
 func Hello() error {
 	fmt.Println("Ehlo there!")
 	fmt.Printf("You're running: %v at %v\n", strings.Title(runtime.GOOS), runtime.GOARCH)
-	return nil
+	_, err := golang.EnsureGolang("1.17.1")
+	return err
 }
 
 // Installs all required programs
