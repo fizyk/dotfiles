@@ -1,0 +1,15 @@
+version: '3'
+
+includes:
+  git: GitTask.yaml
+
+tasks:
+  install:
+    deps:
+      [git:install]
+  config:
+    deps:
+      [git:config]
+  default:
+    deps:
+      [git:install]

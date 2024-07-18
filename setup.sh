@@ -15,5 +15,3 @@ fi
 
 echo "Installed"
 
-
-./setup-git.sh

@@ -4,6 +4,12 @@ Personal dotfiles and system tools installation scripts
 
 ## Prerequistes
 
+1. Install taskfile:
+
+   https://taskfile.dev/installation/
+
+2. Install git
+
 1. Install golang, or run:
 
         setup-go.sh
