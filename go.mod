@@ -6,7 +6,7 @@ require (
 	github.com/fizyk/magex v0.1.5
 	github.com/hashicorp/go-version v1.6.0
 	github.com/magefile/mage v1.15.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
