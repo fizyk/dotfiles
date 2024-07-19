@@ -6,7 +6,6 @@ if ! dpkg --get-selections | grep -q "^curl[[:space:]]*install$" >/dev/null; the
     sudo apt install curl
 fi
 
-./setup-zsh.sh
 ./setup-pyenv.sh
 ./setup-docker.sh
 

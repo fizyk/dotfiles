@@ -1,0 +1,12 @@
+# Git related tasks to perform
+version: '3'
+
+tasks:
+  install:
+    cmds:
+      - task: curl
+  curl:
+    cmds:
+      - sudo apt install curl
+    status:
+      - dpkg --get-selections | grep -q "^curl[[:space:]]*install$" >/dev/null

@@ -1,15 +1,21 @@
 version: '3'
 
 includes:
-  git: GitTask.yaml
+  deps: TaskfileDeps.yaml
+  git: TaskfileGit.yaml
+  zsh: TaskfileZsh.yaml
 
 tasks:
   install:
     deps:
-      [git:install]
+      - deps:install
+    cmds:
+      - task: git:install
+      - task: zsh:install
   config:
     deps:
-      [git:config]
+      - git:config
+      - zsh:config
   default:
     deps:
       [git:install]

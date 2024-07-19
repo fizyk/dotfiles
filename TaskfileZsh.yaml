@@ -1,0 +1,80 @@
+# Git related tasks to perform
+version: '3'
+
+includes:
+  deps:
+    taskfile: TaskfileDeps.yaml
+    internal: true
+
+tasks:
+  install:
+    cmds:
+      - task: package
+      - task: oh-my-zsh
+  package:
+    internal: true
+    cmds:
+      - sudo apt install zsh
+      - echo "Run chsh -s /bin/zsh"
+    status:
+      - dpkg --get-selections | grep -q "^zsh[[:space:]]*install$" >/dev/null
+  oh-my-zsh:
+    deps: [deps:curl]
+    internal: true
+    cmds:
+      - sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    status:
+      - test -d "$HOME/.oh-my-zsh/"
+  config:
+    deps:
+      - powerlevel10k
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+  powerlevel10k-install:
+    internal: true
+    cmds:
+      - git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+    status:
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"
+    preconditions:
+      - test -d "$HOME/.oh-my-zsh/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/"
+  powerlevel10k:
+    deps: [powerlevel10k-install]
+    internal: true
+    cmds:
+      - echo Set 'ZSH_THEME=\"powerlevel10k/powerlevel10k\"'
+    status:
+      - cat $HOME/.zshrc | grep -q "ZSH_THEME=\"powerlevel10k/powerlevel10k\"" >/dev/null
+    preconditions:
+      - test -f "$HOME/.zshrc"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"
+  zsh-syntax-highlighting:
+    internal: true
+    # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh
+    cmds:
+      - git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    status:
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+    preconditions:
+      - test -d "$HOME/.oh-my-zsh/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/"
+  zsh-autosuggestions:
+    internal: true
+    # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
+    cmds:
+      - git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    status:
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+    preconditions:
+      - test -f "$HOME/.zshrc"
+      - test -d "$HOME/.oh-my-zsh/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/"
+      - test -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/"
+  fonts:
+    internal: true
+    # https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/UbuntuMono.zip
+    cmds:
+      - echo "Go to https://github.com/ryanoasis/nerd-fonts/releases and select proper fonts, install it in the system and configure your terminal to use it."
