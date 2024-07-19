@@ -14,6 +14,8 @@ tasks:
     runs: once
     cmds:
       - sudo apt install git
+    status:
+      - dpkg --get-selections | grep -q "^git[[:space:]]*install$" >/dev/null
   config:
     cmds:
       # Based on https://tekin.co.uk/2020/10/better-git-diff-output-for-ruby-python-elixir-and-more
