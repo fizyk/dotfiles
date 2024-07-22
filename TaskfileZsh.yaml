@@ -1,4 +1,4 @@
-# Git related tasks to perform
+# Zsh related tasks to perform
 version: '3'
 
 includes:
@@ -8,20 +8,18 @@ includes:
 
 tasks:
   install:
+    runs: once
     cmds:
-      - task: package
+      - task: deps:apt
+        vars:
+          DEP: zsh
       - task: oh-my-zsh
-  package:
-    internal: true
-    cmds:
-      - sudo apt install zsh
-      - echo "Run chsh -s /bin/zsh"
-    status:
-      - dpkg --get-selections | grep -q "^zsh[[:space:]]*install$" >/dev/null
   oh-my-zsh:
-    deps: [deps:curl]
     internal: true
     cmds:
+      - task: deps:apt
+        vars:
+          DEP: zsh
       - sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     status:
       - test -d "$HOME/.oh-my-zsh/"
@@ -30,6 +28,7 @@ tasks:
       - powerlevel10k
       - zsh-syntax-highlighting
       - zsh-autosuggestions
+      - fonts
   powerlevel10k-install:
     internal: true
     cmds:
