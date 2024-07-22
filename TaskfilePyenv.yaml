@@ -1,0 +1,84 @@
+# Apt related tasks to perform
+version: '3'
+
+includes:
+  deps:
+    taskfile: TaskfileDeps.yaml
+    internal: true
+
+vars:
+  ZSHRC_FILE: "~/.zshrc"
+
+tasks:
+  dependencies:
+    internal: true
+    vars:
+      DEPS: build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    cmds:
+      - for: { var: DEPS }
+        task: deps:apt
+        vars:
+          DEP: '{{.ITEM}}'
+  pyenv:
+    internal: true
+    cmds:
+      - curl https://pyenv.run | bash
+    status:
+      - test -d "$HOME/.pyenv/"
+
+  update:
+    runs: once
+    cmds:
+      - $HOME/.pyenv/bin/pyenv update
+    precondition:
+      - test -d "$HOME/.pyenv/"
+
+  install:
+    runs: once
+    cmds:
+      - task: dependencies
+      - task: pyenv
+      - task: update
+
+  config:
+    cmds:
+      - task: config-pyenv-root
+      - task: config-path
+      - task: config-init-path
+      - task: config-init
+
+  config-pyenv-root:
+    internal: true
+    cmds:
+      - echo 'export PYENV_ROOT="$HOME/.pyenv"' >> {{.ZSHRC_FILE}}
+    precondition:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fxq 'export PYENV_ROOT="$HOME/.pyenv"' {{.ZSHRC_FILE}}
+
+  config-path:
+    internal: true
+    cmds:
+      - echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> {{.ZSHRC_FILE}}
+    precondition:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fxq 'export PATH="$PYENV_ROOT/bin:$PATH"' {{.ZSHRC_FILE}}
+
+  config-init-path:
+    internal: true
+    cmds:
+      - echo 'eval "$(pyenv init --path)"' >> {{.ZSHRC_FILE}}
+    precondition:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fxq 'eval "$(pyenv init --path)"' {{.ZSHRC_FILE}}
+
+  config-init:
+    internal: true
+    cmds:
+      - echo 'eval "$(pyenv init -)"' >> {{.ZSHRC_FILE}}
+    precondition:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fxq 'eval "$(pyenv init -)"' {{.ZSHRC_FILE}}

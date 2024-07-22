@@ -1,21 +1,21 @@
 version: '3'
 
 includes:
-  deps: TaskfileDeps.yaml
   git: TaskfileGit.yaml
   zsh: TaskfileZsh.yaml
+  pyenv: TaskfilePyenv.yaml
 
 tasks:
   install:
-    deps:
-      - deps:install
     cmds:
       - task: git:install
       - task: zsh:install
+      - task: pyenv:install
   config:
-    deps:
-      - git:config
-      - zsh:config
+    cmds:
+      - task: git:config
+      - task: zsh:config
+      - task: pyenv:config
   default:
     deps:
-      [git:install]
+      [install]

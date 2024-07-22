@@ -1,6 +1,11 @@
 # Git related tasks to perform
 version: '3'
 
+includes:
+  deps:
+    taskfile: TaskfileDeps.yaml
+    internal: true
+
 tasks:
   ppa:
     cmds:
@@ -13,9 +18,9 @@ tasks:
     deps: [ppa]
     runs: once
     cmds:
-      - sudo apt install git
-    status:
-      - dpkg --get-selections | grep -q "^git[[:space:]]*install$" >/dev/null
+      - task: deps:apt
+        vars:
+          DEP: git
   config:
     cmds:
       # Based on https://tekin.co.uk/2020/10/better-git-diff-output-for-ruby-python-elixir-and-more

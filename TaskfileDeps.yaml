@@ -2,11 +2,10 @@
 version: '3'
 
 tasks:
-  install:
+  apt:
+    internal: true
+    label: "Install {{.DEP}}"
     cmds:
-      - task: curl
-  curl:
-    cmds:
-      - sudo apt install curl
+      - sudo apt install {{.DEP}}
     status:
-      - dpkg --get-selections | grep -q "^curl[[:space:]]*install$" >/dev/null
+      - dpkg --get-selections | grep -Eq "^{{.DEP}}(:amd64)?[[:space:]]*install$" >/dev/null
