@@ -1,0 +1,64 @@
+# Docker related tasks to perform
+version: '3'
+
+includes:
+  deps:
+    taskfile: TaskfileDeps.yaml
+    internal: true
+
+vars:
+  ZSHRC_FILE: "~/.zshrc"
+
+tasks:
+  dependencies:
+    internal: true
+    vars:
+      DEPS: ca-certificates curl
+    cmds:
+      - for: { var: DEPS }
+        task: deps:apt
+        vars:
+          DEP: '{{.ITEM}}'
+
+  apt:
+    internal: true
+    cmds:
+      - sudo install -m 0755 -d /etc/apt/keyrings
+      - sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      - sudo chmod a+r /etc/apt/keyrings/docker.asc
+      - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      - sudo apt-get update
+    status:
+      - test -f /etc/apt/sources.list.d/docker.list
+
+
+  install:
+    vars:
+      DOCKER_PKGS: docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    cmds:
+      - task: dependencies
+      - task: apt
+      - for: { var: DOCKER_PKGS }
+        task: deps:apt
+        vars:
+          DEP: '{{.ITEM}}'
+
+  group:
+    internal: true
+    cmds:
+      - sudo groupadd docker
+    status:
+      - getent group docker
+  add-user:
+    internal: true
+    runs: once
+    deps: [group]
+    cmds:
+      - sudo usermod -aG docker $USER
+    status:
+      - groups $USER | grep -q docker
+
+  config:
+    cmds:
+      - task: group
+      - task: add-user
