@@ -21,10 +21,9 @@ tasks:
 
 
   plugins:
-    deps: [
-      golang,
-      lazydocker
-    ]
+    deps:
+      - lazydocker
+      - golang
 
   golang:
     internal: true
@@ -37,23 +36,9 @@ tasks:
 
   lazydocker:
     internal: true
-    commands:
+    cmds:
       - asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
     precondition:
       - asdf info
     status:
       - asdf plugin list | grep lazydocker
-
-
-
-
-
-
-
-
-
-
-
-
-
-
