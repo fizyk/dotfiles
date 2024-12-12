@@ -11,5 +11,5 @@ tasks:
     precondition:
       - test -f "{{.ZSHRC_FILE}}"
     status:
-      - test -d "~/.atuin/bin"
+      - test -d ~/.atuin/bin
       - grep -Fq 'atuin' {{.ZSHRC_FILE}}
