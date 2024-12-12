@@ -1,0 +1,15 @@
+# Asdf related tasks to perform
+version: '3'
+
+vars:
+  ZSHRC_FILE: "~/.zshrc"
+
+tasks:
+  install:
+    cmds:
+      - curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+    precondition:
+      - test -f "{{.ZSHRC_FILE}}"
+    status:
+      - test -d "~/.atuin/bin"
+      - grep -Fq 'atuin' {{.ZSHRC_FILE}}
