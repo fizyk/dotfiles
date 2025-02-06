@@ -3,36 +3,52 @@ version: '3'
 
 vars:
   ZSHRC_FILE: "~/.zshrc"
+  ASDF_VERSION: "0.16.1"
 
 tasks:
   install:
+    desc: Install ASDF {{.ASDF_VERSION}}
     cmds:
-      - git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+      - wget https://github.com/asdf-vm/asdf/releases/download/v{{.ASDF_VERSION}}/asdf-v{{.ASDF_VERSION}}-linux-amd64.tar.gz
+      - tar xvzf asdf-v{{.ASDF_VERSION}}-linux-amd64.tar.gz
+      - rm asdf-v{{.ASDF_VERSION}}-linux-amd64.tar.gz
+      - sudo mv asdf /usr/local/bin
     status:
-      - test -d ~/.asdf/
+      - asdf --version | grep {{.ASDF_VERSION}}
+
   config:
+    desc: Configure ASDF
     cmds:
-      - echo "Activate asdf plugin for your zsh"
+      - echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> {{.ZSHRC_FILE}}
     precondition:
-      - test -f "{{.ZSHRC_FILE}}"
-      - test -d "~/.asdf/"
+      - test -f "$HOME/.zshrc"
     status:
-      - grep -Fq 'asdf' {{.ZSHRC_FILE}}
+      - grep -Fxq 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' {{.ZSHRC_FILE}}
 
 
   plugins:
     deps:
       - lazydocker
       - golang
+      - pre-commit
 
   golang:
     internal: true
     cmds:
-      - asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+      - asdf plugin add golang
     precondition:
       - asdf info
     status:
       - asdf plugin list | grep golang
+
+  pre-commit:
+    internal: true
+    cmds:
+      - asdf plugin add pre-commit
+    precondition:
+      - asdf info
+    status:
+      - asdf plugin list | grep pre-commit
 
   lazydocker:
     internal: true

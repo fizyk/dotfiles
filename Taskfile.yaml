@@ -10,6 +10,7 @@ includes:
 
 tasks:
   install:
+    desc: "Installs all"
     cmds:
       - task: git:install
       - task: zsh:install
@@ -18,6 +19,7 @@ tasks:
       - task: asdf:install
       - task: atuin:install
   config:
+    desc: "Configures all"
     cmds:
       - task: git:config
       - task: zsh:config
