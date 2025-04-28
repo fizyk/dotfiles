@@ -3,7 +3,7 @@ version: '3'
 
 vars:
   ZSHRC_FILE: "~/.zshrc"
-  ASDF_VERSION: "0.16.5"
+  ASDF_VERSION: "0.16.7"
 
 tasks:
   install:
