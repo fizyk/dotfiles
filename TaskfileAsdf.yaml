@@ -1,9 +1,18 @@
 # Asdf related tasks to perform
 version: '3'
 
+includes:
+  deps:
+    taskfile: TaskfileDeps.yaml
+    internal: true
+
 vars:
   ZSHRC_FILE: "~/.zshrc"
   ASDF_VERSION: "0.16.7"
+  PYTHON_VERSION: "3.13.3"
+  GOLANG_VERSION: "1.24.3"
+  LAZYDOCKER_VERSION: "0.24.1"
+  PRE_COMMIT_VERSION: "4.2.0"
 
 tasks:
   install:
@@ -31,8 +40,9 @@ tasks:
       - lazydocker
       - golang
       - pre-commit
+      - python
 
-  golang:
+  golang:activate:
     internal: true
     cmds:
       - asdf plugin add golang
@@ -41,7 +51,19 @@ tasks:
     status:
       - asdf plugin list | grep golang
 
-  pre-commit:
+  golang:
+    internal: true
+    cmds:
+      - asdf install golang {{ .GOLANG_VERSION }}
+      - asdf set -u golang {{ .GOLANG_VERSION }}
+    deps:
+      - golang:activate
+    precondition:
+      - asdf plugin list | grep golang
+    status:
+      - asdf current | grep golang | grep {{ .GOLANG_VERSION }}
+
+  pre-commit:activate:
     internal: true
     cmds:
       - asdf plugin add pre-commit
@@ -50,11 +72,63 @@ tasks:
     status:
       - asdf plugin list | grep pre-commit
 
-  lazydocker:
+  pre-commit:
     internal: true
     cmds:
-      - asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
+      - asdf install pre-commit {{ .PRE_COMMIT_VERSION }}
+      - asdf set -u pre-commit {{ .PRE_COMMIT_VERSION }}
+    deps:
+      - pre-commit:activate
+    precondition:
+      - asdf plugin list | grep pre-commit
+    status:
+      - asdf current | grep pre-commit | grep {{ .PRE_COMMIT_VERSION }}
+
+  python:activate:
+    internal: true
+    vars:
+      DEPS: build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    cmds:
+      - asdf plugin add python
+      - for: { var: DEPS }
+        task: deps:apt
+        vars:
+          DEP: '{{.ITEM}}'
+    precondition:
+      - asdf info
+    status:
+      - asdf plugin list | grep python
+
+  python:
+    internal: true
+    desc: Install python {{ .PYTHON_VERSION }}
+    cmds:
+      - asdf install python {{ .PYTHON_VERSION }}
+      - asdf set -u python {{ .PYTHON_VERSION }}
+    deps:
+      - python:activate
+    precondition:
+      - asdf plugin list | grep python
+    status:
+      - asdf current | grep python | grep {{ .PYTHON_VERSION }}
+
+  lazydocker:activate:
+    internal: true
+    cmds:
+      - asdf plugin add lazydocker
     precondition:
       - asdf info
     status:
       - asdf plugin list | grep lazydocker
+
+  lazydocker:
+    internal: true
+    cmds:
+      - asdf install lazydocker {{ .LAZYDOCKER_VERSION }}
+      - asdf set -u lazydocker {{ .LAZYDOCKER_VERSION }}
+    deps:
+      - lazydocker:activate
+    precondition:
+      - asdf plugin list | grep lazydocker
+    status:
+      - asdf current | grep lazydocker | grep {{ .LAZYDOCKER_VERSION }}
