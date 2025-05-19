@@ -6,6 +6,6 @@ tasks:
     internal: true
     label: "Install {{.DEP}}"
     cmds:
-      - sudo apt install {{.DEP}}
+      - sudo apt install {{.DEP}} -y
     status:
       - dpkg --get-selections | grep -Eq "^{{.DEP}}(:amd64)?[[:space:]]*install$" >/dev/null

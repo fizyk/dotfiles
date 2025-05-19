@@ -20,6 +20,9 @@ tasks:
       - task: deps:apt
         vars:
           DEP: zsh
+      - task: deps:apt
+        vars:
+          DEP: curl
       - sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     status:
       - test -d "$HOME/.oh-my-zsh/"
@@ -29,6 +32,9 @@ tasks:
       - zsh-syntax-highlighting
       - zsh-autosuggestions
       - fonts
+    cmds:
+      - chsh -s $(which zsh)
+      - echo "You'd need to log out and log in"
   powerlevel10k-install:
     internal: true
     cmds:

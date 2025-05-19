@@ -3,7 +3,6 @@ version: '3'
 includes:
   git: TaskfileGit.yaml
   zsh: TaskfileZsh.yaml
-  pyenv: TaskfilePyenv.yaml
   docker: TaskfileDocker.yaml
   asdf: TaskfileAsdf.yaml
   atuin: TaskfileAtuin.yaml
@@ -14,7 +13,6 @@ tasks:
     cmds:
       - task: git:install
       - task: zsh:install
-      - task: pyenv:install
       - task: docker:install
       - task: asdf:install
       - task: atuin:install
@@ -23,7 +21,6 @@ tasks:
     cmds:
       - task: git:config
       - task: zsh:config
-      - task: pyenv:config
       - task: docker:config
       - task: asdf:config
   default:
