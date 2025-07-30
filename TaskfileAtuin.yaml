@@ -13,3 +13,9 @@ tasks:
     status:
       - test -d ~/.atuin/bin
       - grep -Fq 'atuin' {{.ZSHRC_FILE}}
+
+  update:
+    cmds:
+      - atuin update
+    precondition:
+      - atuin --version
