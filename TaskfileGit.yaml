@@ -31,3 +31,4 @@ tasks:
       - git config --global alias.cleanup-remote "!git fetch origin -p && git branch -r --list 'origin/*' --merged origin/main | egrep -v '(^\*|main|dev)' | sed 's/origin\///' | xargs -n 1 git push origin --delete"
       # Configure git for golang to treat repositories as git ones not mercurial:
       - git config --global url."git@bitbucket.org:".insteadOf "https://bitbucket.org/"
+      - git config --global init.defaultBranch main
