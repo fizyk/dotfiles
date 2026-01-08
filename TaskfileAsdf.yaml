@@ -9,9 +9,9 @@ includes:
 vars:
   ZSHRC_FILE: "~/.zshrc"
   ASDF_VERSION: "0.18.0"
-  PYTHON_VERSION: "3.13.5"
-  GOLANG_VERSION: "1.24.4"
-  LAZYDOCKER_VERSION: "0.24.2"
+  PYTHON_VERSION: "3.14.2"
+  GOLANG_VERSION: "1.25.5"
+  LAZYDOCKER_VERSION: "0.24.3"
   PRE_COMMIT_VERSION: "4.3.0"
 
 tasks:
@@ -29,7 +29,7 @@ tasks:
     desc: Configure ASDF
     cmds:
       - echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> {{.ZSHRC_FILE}}
-    precondition:
+    preconditions:
       - test -f "$HOME/.zshrc"
     status:
       - grep -Fxq 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' {{.ZSHRC_FILE}}
@@ -46,10 +46,12 @@ tasks:
     internal: true
     cmds:
       - asdf plugin add golang
-    precondition:
+    preconditions:
       - asdf info
+      - sh: 'asdf plugin list all | grep -w golang'
+        msg: "golang is not available in the official asdf plugins"
     status:
-      - asdf plugin list | grep golang
+      - asdf plugin list | grep -w golang
 
   golang:
     internal: true
@@ -58,8 +60,8 @@ tasks:
       - asdf set -u golang {{ .GOLANG_VERSION }}
     deps:
       - golang:activate
-    precondition:
-      - asdf plugin list | grep golang
+    preconditions:
+      - asdf plugin list | grep -w golang
     status:
       - asdf current | grep golang | grep {{ .GOLANG_VERSION }}
 
@@ -67,10 +69,12 @@ tasks:
     internal: true
     cmds:
       - asdf plugin add pre-commit
-    precondition:
+    preconditions:
       - asdf info
+      - sh: 'asdf plugin list all | grep -w pre-commit'
+        msg: "pre-commit is not available in the official asdf plugins"
     status:
-      - asdf plugin list | grep pre-commit
+      - asdf plugin list | grep -w pre-commit
 
   pre-commit:
     internal: true
@@ -79,10 +83,10 @@ tasks:
       - asdf set -u pre-commit {{ .PRE_COMMIT_VERSION }}
     deps:
       - pre-commit:activate
-    precondition:
-      - asdf plugin list | grep pre-commit
+    preconditions:
+      - asdf plugin list | grep -w pre-commit
     status:
-      - asdf current | grep pre-commit | grep {{ .PRE_COMMIT_VERSION }}
+      - asdf current | grep -w pre-commit | grep {{ .PRE_COMMIT_VERSION }}
 
   python:activate:
     internal: true
@@ -94,10 +98,12 @@ tasks:
         task: deps:apt
         vars:
           DEP: '{{.ITEM}}'
-    precondition:
+    preconditions:
       - asdf info
+      - sh: 'asdf plugin list all | grep -w python'
+        msg: "Python is not available in the official asdf plugins"
     status:
-      - asdf plugin list | grep python
+      - asdf plugin list | grep -w python
 
   python:
     internal: true
@@ -107,19 +113,20 @@ tasks:
       - asdf set -u python {{ .PYTHON_VERSION }}
     deps:
       - python:activate
-    precondition:
-      - asdf plugin list | grep python
+    preconditions:
+      - asdf plugin list | grep -w python
     status:
-      - asdf current | grep python | grep {{ .PYTHON_VERSION }}
+      - asdf current | grep -w python | grep {{ .PYTHON_VERSION }}
 
   lazydocker:activate:
     internal: true
     cmds:
-      - asdf plugin add lazydocker
-    precondition:
+      # Plugin repository is unmaintained but works with recent versions of asdf and lazydocker
+      - asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
+    preconditions:
       - asdf info
     status:
-      - asdf plugin list | grep lazydocker
+      - asdf plugin list | grep -w lazydocker
 
   lazydocker:
     internal: true
@@ -128,7 +135,7 @@ tasks:
       - asdf set -u lazydocker {{ .LAZYDOCKER_VERSION }}
     deps:
       - lazydocker:activate
-    precondition:
-      - asdf plugin list | grep lazydocker
+    preconditions:
+      - asdf plugin list | grep -w lazydocker
     status:
-      - asdf current | grep lazydocker | grep {{ .LAZYDOCKER_VERSION }}
+      - asdf current | grep -w lazydocker | grep {{ .LAZYDOCKER_VERSION }}

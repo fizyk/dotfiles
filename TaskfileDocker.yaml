@@ -62,7 +62,3 @@ tasks:
     cmds:
       - task: group
       - task: add-user
-
-  tools:
-    cmds:
-      - go install github.com/jesseduffield/lazydocker@latest

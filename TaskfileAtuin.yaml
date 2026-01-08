@@ -8,7 +8,7 @@ tasks:
   install:
     cmds:
       - curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-    precondition:
+    preconditions:
       - test -f "{{.ZSHRC_FILE}}"
     status:
       - test -d ~/.atuin/bin
@@ -17,5 +17,5 @@ tasks:
   update:
     cmds:
       - atuin update
-    precondition:
+    preconditions:
       - atuin --version
