@@ -7,7 +7,8 @@ vars:
   PYTHON_VERSION: "3.14.2"
   GO_VERSION: "1.25.5"
   LAZYDOCKER_VERSION: "0.24.3"
-  PRE_COMMIT_VERSION: "4.3.0"
+  PREK_VERSION: "0.4.1"
+  UV_VERSION: "0.11.15"
 
 tasks:
   install:
@@ -32,7 +33,8 @@ tasks:
     deps:
       - go
       - python
-      - pre-commit
+      - uv
+      - prek
       - lazydocker
 
   go:
@@ -54,14 +56,23 @@ tasks:
     status:
       - mise current python | grep -w {{.PYTHON_VERSION}}
 
-  pre-commit:
+  uv:
     internal: true
     cmds:
-      - mise use -g pre-commit@{{.PRE_COMMIT_VERSION}}
+      - mise use -g uv@{{.UV_VERSION}}
     preconditions:
       - mise --version
     status:
-      - mise current pre-commit | grep -w {{.PRE_COMMIT_VERSION}}
+      - mise current uv | grep -w {{.UV_VERSION}}
+
+  prek:
+    internal: true
+    cmds:
+      - mise use -g prek@{{.PREK_VERSION}}
+    preconditions:
+      - mise --version
+    status:
+      - mise current prek | grep -w {{.PREK_VERSION}}
 
   lazydocker:
     internal: true
