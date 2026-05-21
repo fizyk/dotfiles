@@ -11,13 +11,13 @@ Personal dotfiles repo that bootstraps a developer workstation. There is no appl
 All commands run from the repo root via the `task` binary (must be installed first; see README).
 
 - `task --list-all` — discover every task across all included Taskfiles.
-- `task install` — run every tool's `install` (git, zsh, docker, asdf, atuin) in order. This is also the default target.
-- `task config` — run every tool's `config` (git, zsh, docker, asdf). Atuin has no `config` task.
-- `task <ns>:install` / `task <ns>:config` — operate on one tool only, where `<ns>` is `git`, `zsh`, `docker`, `asdf`, or `atuin`.
-- `task asdf:plugins` — install/pin the asdf-managed runtimes (golang, python, pre-commit, lazydocker) at the versions declared in `TaskfileAsdf.yaml` vars.
+- `task install` — run every tool's `install` (git, zsh, docker, mise, atuin) in order. This is also the default target.
+- `task config` — run every tool's `config` (git, zsh, docker, mise). Atuin has no `config` task.
+- `task <ns>:install` / `task <ns>:config` — operate on one tool only, where `<ns>` is `git`, `zsh`, `docker`, `mise`, or `atuin`.
+- `task mise:tools` — install/pin the mise-managed runtimes (go, python, pre-commit, lazydocker) at the versions declared in `TaskfileMise.yaml` vars.
 - `task atuin:update` — update an already-installed atuin.
 
-Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `asdf current | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
+Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `mise current <tool> | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
 
 ## Architecture
 
@@ -26,13 +26,13 @@ The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile 
 - `TaskfileGit.yaml` — adds the `git-core/ppa`, installs git, copies `.gitattributes` to `~/`, sets global aliases (`cleanup`, `cleanup-remote`) and config (default branch `main`, bitbucket SSH rewrite for Go).
 - `TaskfileZsh.yaml` — installs zsh + oh-my-zsh (unattended curl installer), then in `config` clones powerlevel10k, zsh-syntax-highlighting, and zsh-autosuggestions into `${ZSH_CUSTOM:-~/.oh-my-zsh/custom}` and switches the login shell. Nerd Font installation is left as a manual step (printed to stdout).
 - `TaskfileDocker.yaml` — adds Docker's official apt repository (keyring under `/etc/apt/keyrings`), installs `docker-ce docker-ce-cli containerd.io docker-compose-plugin`, then in `config` creates the `docker` group and adds `$USER` to it.
-- `TaskfileAsdf.yaml` — downloads the asdf binary tarball at a pinned `ASDF_VERSION`, appends the shims `PATH` line to `~/.zshrc`, and via the `plugins` task installs pinned versions of golang, python, pre-commit, and lazydocker. Python pulls in a long list of build-deps because asdf compiles CPython from source. Lazydocker uses a third-party plugin repo (`comdotlinux/asdf-lazydocker`) — noted as unmaintained but working.
+- `TaskfileMise.yaml` — runs the upstream `mise.run` installer pinned to `MISE_VERSION` (which drops the binary at `~/.local/bin/mise`), then `sudo mv`s it to `/usr/local/bin/mise` so it's on the default `sh` PATH (Task uses `sh`, which does not source `~/.profile`, so a user-local install would not be visible to subsequent tasks). The `config` task appends `eval "$(mise activate zsh)"` to `~/.zshrc`. The `tools` task installs pinned versions of go, python, pre-commit, and lazydocker through mise's built-in registry — no third-party plugins or apt build-deps are required (mise installs Python from python-build-standalone by default, and lazydocker comes from the `aqua:jesseduffield/lazydocker` registry entry).
 - `TaskfileAtuin.yaml` — runs the upstream `setup.atuin.sh` installer; requires `~/.zshrc` to exist.
 - `TaskfileDeps.yaml` — internal-only helper exposing a single `apt` task that takes a `DEP` var and idempotently installs it. Other Taskfiles include this as `deps:` (marked `internal: true`) and call `task: deps:apt` with `vars: { DEP: … }`. When adding a new apt-installable dependency, route it through this helper rather than calling `sudo apt install` directly so the `dpkg --get-selections` status check is consistent.
 
 ### Version pinning
 
-Tool versions live as `vars:` at the top of `TaskfileAsdf.yaml` (`ASDF_VERSION`, `PYTHON_VERSION`, `GOLANG_VERSION`, `LAZYDOCKER_VERSION`, `PRE_COMMIT_VERSION`). To bump a version, change the var — the `status:` checks (`asdf current | grep …`) will then detect the mismatch and re-run the install. Dependabot is configured (`.github/dependabot.yml`) for GitHub Actions and Go modules only; asdf-managed versions are bumped manually.
+Tool versions live as `vars:` at the top of `TaskfileMise.yaml` (`MISE_VERSION`, `PYTHON_VERSION`, `GO_VERSION`, `LAZYDOCKER_VERSION`, `PRE_COMMIT_VERSION`). To bump a version, change the var — the `status:` checks (`mise current <tool> | grep …`) will then detect the mismatch and re-run `mise use -g`. Dependabot is configured (`.github/dependabot.yml`) for GitHub Actions and Go modules only; mise-managed versions are bumped manually.
 
 ### Conventions
 

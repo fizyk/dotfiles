@@ -1,0 +1,73 @@
+# Mise (https://mise.jdx.dev) related tasks to perform
+version: '3'
+
+vars:
+  ZSHRC_FILE: "~/.zshrc"
+  MISE_VERSION: "2026.5.13"
+  PYTHON_VERSION: "3.14.2"
+  GO_VERSION: "1.25.5"
+  LAZYDOCKER_VERSION: "0.24.3"
+  PRE_COMMIT_VERSION: "4.3.0"
+
+tasks:
+  install:
+    desc: Install mise {{.MISE_VERSION}}
+    cmds:
+      - curl https://mise.run | MISE_VERSION=v{{.MISE_VERSION}} sh
+      - sudo mv $HOME/.local/bin/mise /usr/local/bin/mise
+    status:
+      - mise --version | grep -w {{.MISE_VERSION}}
+
+  config:
+    desc: Configure mise (zsh activation)
+    cmds:
+      - echo 'eval "$(mise activate zsh)"' >> {{.ZSHRC_FILE}}
+    preconditions:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fq 'mise activate zsh' {{.ZSHRC_FILE}}
+
+  tools:
+    desc: Install pinned tools via mise
+    deps:
+      - go
+      - python
+      - pre-commit
+      - lazydocker
+
+  go:
+    internal: true
+    cmds:
+      - mise use -g go@{{.GO_VERSION}}
+    preconditions:
+      - mise --version
+    status:
+      - mise current go | grep -w {{.GO_VERSION}}
+
+  python:
+    internal: true
+    desc: Install python {{.PYTHON_VERSION}}
+    cmds:
+      - mise use -g python@{{.PYTHON_VERSION}}
+    preconditions:
+      - mise --version
+    status:
+      - mise current python | grep -w {{.PYTHON_VERSION}}
+
+  pre-commit:
+    internal: true
+    cmds:
+      - mise use -g pre-commit@{{.PRE_COMMIT_VERSION}}
+    preconditions:
+      - mise --version
+    status:
+      - mise current pre-commit | grep -w {{.PRE_COMMIT_VERSION}}
+
+  lazydocker:
+    internal: true
+    cmds:
+      - mise use -g lazydocker@{{.LAZYDOCKER_VERSION}}
+    preconditions:
+      - mise --version
+    status:
+      - mise current lazydocker | grep -w {{.LAZYDOCKER_VERSION}}

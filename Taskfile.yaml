@@ -4,7 +4,7 @@ includes:
   git: TaskfileGit.yaml
   zsh: TaskfileZsh.yaml
   docker: TaskfileDocker.yaml
-  asdf: TaskfileAsdf.yaml
+  mise: TaskfileMise.yaml
   atuin: TaskfileAtuin.yaml
 
 tasks:
@@ -14,7 +14,7 @@ tasks:
       - task: git:install
       - task: zsh:install
       - task: docker:install
-      - task: asdf:install
+      - task: mise:install
       - task: atuin:install
   config:
     desc: "Configures all"
@@ -22,7 +22,7 @@ tasks:
       - task: git:config
       - task: zsh:config
       - task: docker:config
-      - task: asdf:config
+      - task: mise:config
   default:
     deps:
       [install]
