@@ -6,8 +6,8 @@ vars:
   PYTHON_VERSION: "3.14.6"
   GO_VERSION: "1.25.5"
   LAZYDOCKER_VERSION: "0.24.3"
-  PREK_VERSION: "0.4.4"
-  UV_VERSION: "0.11.19"
+  PREK_VERSION: "0.4.9"
+  UV_VERSION: "0.12.1"
 
 tasks:
   clean:
