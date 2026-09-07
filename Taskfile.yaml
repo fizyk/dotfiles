@@ -6,6 +6,7 @@ includes:
   docker: TaskfileDocker.yaml
   mise: TaskfileMise.yaml
   atuin: TaskfileAtuin.yaml
+  task: TaskfileTask.yaml
 
 tasks:
   install:
@@ -23,6 +24,7 @@ tasks:
       - task: zsh:config
       - task: docker:config
       - task: mise:config
+      - task: task:config
   default:
     deps:
       [install]

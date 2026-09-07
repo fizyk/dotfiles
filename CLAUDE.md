@@ -12,8 +12,8 @@ All commands run from the repo root via the `task` binary (must be installed fir
 
 - `task --list-all` — discover every task across all included Taskfiles.
 - `task install` — run every tool's `install` (git, zsh, docker, mise, atuin) in order. This is also the default target.
-- `task config` — run every tool's `config` (git, zsh, docker, mise). Atuin has no `config` task.
-- `task <ns>:install` / `task <ns>:config` — operate on one tool only, where `<ns>` is `git`, `zsh`, `docker`, `mise`, or `atuin`.
+- `task config` — run every tool's `config` (git, zsh, docker, mise, task). Atuin has no `config` task.
+- `task <ns>:install` / `task <ns>:config` — operate on one tool only, where `<ns>` is `git`, `zsh`, `docker`, `mise`, `atuin`, or `task`.
 - `task mise:tools` — install/pin the mise-managed runtimes (go, python, uv, prek, lazydocker) at the versions declared in `TaskfileMise.yaml` vars.
 - `task atuin:update` — update an already-installed atuin.
 
@@ -27,6 +27,7 @@ The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile 
 - `TaskfileZsh.yaml` — installs zsh + oh-my-zsh (unattended curl installer), then in `config` clones powerlevel10k, zsh-syntax-highlighting, and zsh-autosuggestions into `${ZSH_CUSTOM:-~/.oh-my-zsh/custom}` and switches the login shell. Nerd Font installation is left as a manual step (printed to stdout).
 - `TaskfileDocker.yaml` — adds Docker's official apt repository (keyring under `/etc/apt/keyrings`), installs `docker-ce docker-ce-cli containerd.io docker-compose-plugin`, then in `config` creates the `docker` group and adds `$USER` to it.
 - `TaskfileMise.yaml` — installs mise via `sudo snap install mise --classic` (the `clean` dep first removes any older `/usr/local/bin/mise` left by the previous `mise.run` install method). The `config` task appends `eval "$(mise activate zsh)"` to `~/.zshrc`. The `tools` task parses `[tools]` out of `mise.toml` with awk and applies every pin in one `mise use -g` call — all tools come from mise's built-in registry, so no third-party plugins or apt build-deps are required (mise installs Python from python-build-standalone by default, and lazydocker comes from the `aqua:jesseduffield/lazydocker` registry entry).
+- `TaskfileTask.yaml` — configures `task` line completion in zsh by appending `eval "$(task --completion zsh)"` to `~/.zshrc`.
 - `TaskfileAtuin.yaml` — runs the upstream `setup.atuin.sh` installer; requires `~/.zshrc` to exist.
 - `TaskfileDeps.yaml` — internal-only helper exposing a single `apt` task that takes a `DEP` var and idempotently installs it. Other Taskfiles include this as `deps:` (marked `internal: true`) and call `task: deps:apt` with `vars: { DEP: … }`. When adding a new apt-installable dependency, route it through this helper rather than calling `sudo apt install` directly so the `dpkg --get-selections` status check is consistent.
 

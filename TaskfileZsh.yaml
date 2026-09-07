@@ -8,6 +8,7 @@ includes:
 
 tasks:
   install:
+    desc: Install Zsh and its dependencies
     runs: once
     cmds:
       - task: deps:apt
@@ -27,6 +28,7 @@ tasks:
     status:
       - test -d "$HOME/.oh-my-zsh/"
   config:
+    desc: Configure Zsh and its plugins
     deps:
       - powerlevel10k
       - zsh-syntax-highlighting

@@ -1,0 +1,15 @@
+# Task (https://taskfile.dev) related tasks to perform
+version: '3'
+
+vars:
+  ZSHRC_FILE: "~/.zshrc"
+
+tasks:
+  config:
+    desc: Configure task completion in zsh
+    cmds:
+      - echo 'eval "$(task --completion zsh)"' >> {{.ZSHRC_FILE}}
+    preconditions:
+      - test -f "$HOME/.zshrc"
+    status:
+      - grep -Fq 'task --completion zsh' {{.ZSHRC_FILE}}
