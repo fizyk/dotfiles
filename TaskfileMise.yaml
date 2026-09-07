@@ -3,11 +3,11 @@ version: '3'
 
 vars:
   ZSHRC_FILE: "~/.zshrc"
-  PYTHON_VERSION: "3.14.6"
-  GO_VERSION: "1.25.5"
-  LAZYDOCKER_VERSION: "0.24.3"
-  PREK_VERSION: "0.4.9"
-  UV_VERSION: "0.12.1"
+  PYTHON_VERSION: "3.14.7"
+  GO_VERSION: "1.27.1"
+  LAZYDOCKER_VERSION: "0.25.2"
+  PREK_VERSION: "0.5.2"
+  UV_VERSION: "0.12.10"
 
 tasks:
   clean:
