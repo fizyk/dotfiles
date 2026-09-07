@@ -17,7 +17,7 @@ All commands run from the repo root via the `task` binary (must be installed fir
 - `task mise:tools` — install/pin the mise-managed runtimes (go, python, uv, prek, lazydocker) at the versions declared in `TaskfileMise.yaml` vars.
 - `task atuin:update` — update an already-installed atuin.
 
-Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `mise current <tool> | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
+Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `mise ls --installed <tool> | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
 
 ## Architecture
 
@@ -33,7 +33,7 @@ The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile 
 
 ### Version pinning
 
-Tool versions live in `mise.toml` at the repo root, not in the Taskfile. To bump one, edit that file — `task mise:tools` compares each pin against `mise current <tool>` and re-runs `mise use -g` for the whole set on any mismatch. `mise use -g` merges into `~/.config/mise/config.toml`, so tools pinned there outside this repo survive the run.
+Tool versions live in `mise.toml` at the repo root, not in the Taskfile. To bump one, edit that file — `task mise:tools` compares each pin against `mise ls --installed <tool>` and re-runs `mise use -g` for the whole set on any mismatch. `mise use -g` merges into `~/.config/mise/config.toml`, so tools pinned there outside this repo survive the run.
 
 Two consequences of that layout:
 

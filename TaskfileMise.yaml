@@ -48,5 +48,5 @@ tasks:
       - |
         for t in {{.TOOLS}}; do
           case "${t#*@}" in latest) continue ;; esac
-          mise current "${t%@*}" 2>/dev/null | grep -qw "${t#*@}" || exit 1
+          mise ls --installed "${t%@*}" 2>/dev/null | grep -qw "${t#*@}" || exit 1
         done
