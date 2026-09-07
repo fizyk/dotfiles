@@ -3,11 +3,7 @@ version: '3'
 
 vars:
   ZSHRC_FILE: "~/.zshrc"
-  PYTHON_VERSION: "3.14.7"
-  GO_VERSION: "1.27.1"
-  LAZYDOCKER_VERSION: "0.25.2"
-  PREK_VERSION: "0.5.2"
-  UV_VERSION: "0.12.10"
+  MISE_FILE: "mise.toml"
 
 tasks:
   clean:
@@ -38,55 +34,19 @@ tasks:
 
   tools:
     desc: Install pinned tools via mise
-    deps:
-      - go
-      - python
-      - uv
-      - prek
-      - lazydocker
-
-  go:
-    internal: true
+    vars:
+      TOOLS:
+        sh: >-
+          awk '/^\[tools\]/{f=1;next} /^\[/{f=0}
+          f&&/=/{gsub(/["[:space:]]/,"");split($0,a,"=");if(a[1]!="")printf "%s@%s ",a[1],a[2]}'
+          {{.MISE_FILE}}
     cmds:
-      - mise use -g go@{{.GO_VERSION}}
+      - mise use -g {{.TOOLS}}
     preconditions:
       - mise --version
     status:
-      - mise current go | grep -w {{.GO_VERSION}}
-
-  python:
-    internal: true
-    desc: Install python {{.PYTHON_VERSION}}
-    cmds:
-      - mise use -g python@{{.PYTHON_VERSION}}
-    preconditions:
-      - mise --version
-    status:
-      - mise current python | grep -w {{.PYTHON_VERSION}}
-
-  uv:
-    internal: true
-    cmds:
-      - mise use -g uv@{{.UV_VERSION}}
-    preconditions:
-      - mise --version
-    status:
-      - mise current uv | grep -w {{.UV_VERSION}}
-
-  prek:
-    internal: true
-    cmds:
-      - mise use -g prek@{{.PREK_VERSION}}
-    preconditions:
-      - mise --version
-    status:
-      - mise current prek | grep -w {{.PREK_VERSION}}
-
-  lazydocker:
-    internal: true
-    cmds:
-      - mise use -g lazydocker@{{.LAZYDOCKER_VERSION}}
-    preconditions:
-      - mise --version
-    status:
-      - mise current lazydocker | grep -w {{.LAZYDOCKER_VERSION}}
+      - |
+        for t in {{.TOOLS}}; do
+          case "${t#*@}" in latest) continue ;; esac
+          mise current "${t%@*}" 2>/dev/null | grep -qw "${t#*@}" || exit 1
+        done

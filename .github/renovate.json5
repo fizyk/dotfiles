@@ -1,0 +1,20 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+
+  // The only thing to scan here is mise.toml. Renovate's built-in `mise`
+  // manager matches it by default (**/{,.}mise{,.*}.toml), so there is no
+  // manager or datasource configuration to write.
+
+  timezone: "Europe/Warsaw",
+  schedule: ["before 6am on monday"],
+
+  packageRules: [
+    {
+      // These six move together in practice, and every past bump here was a
+      // single "Update tool versions" commit. One PR keeps that shape.
+      matchManagers: ["mise"],
+      groupName: "tool versions",
+    },
+  ],
+}

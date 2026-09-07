@@ -26,13 +26,20 @@ The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile 
 - `TaskfileGit.yaml` — adds the `git-core/ppa`, installs git, copies `.gitattributes` to `~/`, sets global aliases (`cleanup`, `cleanup-remote`) and config (default branch `main`, bitbucket SSH rewrite for Go).
 - `TaskfileZsh.yaml` — installs zsh + oh-my-zsh (unattended curl installer), then in `config` clones powerlevel10k, zsh-syntax-highlighting, and zsh-autosuggestions into `${ZSH_CUSTOM:-~/.oh-my-zsh/custom}` and switches the login shell. Nerd Font installation is left as a manual step (printed to stdout).
 - `TaskfileDocker.yaml` — adds Docker's official apt repository (keyring under `/etc/apt/keyrings`), installs `docker-ce docker-ce-cli containerd.io docker-compose-plugin`, then in `config` creates the `docker` group and adds `$USER` to it.
-- `TaskfileMise.yaml` — runs the upstream `mise.run` installer pinned to `MISE_VERSION` (which drops the binary at `~/.local/bin/mise`), then `sudo mv`s it to `/usr/local/bin/mise` so it's on the default `sh` PATH (Task uses `sh`, which does not source `~/.profile`, so a user-local install would not be visible to subsequent tasks). The `config` task appends `eval "$(mise activate zsh)"` to `~/.zshrc`. The `tools` task installs pinned versions of go, python, uv, prek, and lazydocker through mise's built-in registry — no third-party plugins or apt build-deps are required (mise installs Python from python-build-standalone by default, and lazydocker comes from the `aqua:jesseduffield/lazydocker` registry entry).
+- `TaskfileMise.yaml` — installs mise via `sudo snap install mise --classic` (the `clean` dep first removes any older `/usr/local/bin/mise` left by the previous `mise.run` install method). The `config` task appends `eval "$(mise activate zsh)"` to `~/.zshrc`. The `tools` task parses `[tools]` out of `mise.toml` with awk and applies every pin in one `mise use -g` call — all tools come from mise's built-in registry, so no third-party plugins or apt build-deps are required (mise installs Python from python-build-standalone by default, and lazydocker comes from the `aqua:jesseduffield/lazydocker` registry entry).
 - `TaskfileAtuin.yaml` — runs the upstream `setup.atuin.sh` installer; requires `~/.zshrc` to exist.
 - `TaskfileDeps.yaml` — internal-only helper exposing a single `apt` task that takes a `DEP` var and idempotently installs it. Other Taskfiles include this as `deps:` (marked `internal: true`) and call `task: deps:apt` with `vars: { DEP: … }`. When adding a new apt-installable dependency, route it through this helper rather than calling `sudo apt install` directly so the `dpkg --get-selections` status check is consistent.
 
 ### Version pinning
 
-Tool versions live as `vars:` at the top of `TaskfileMise.yaml` (`MISE_VERSION`, `PYTHON_VERSION`, `GO_VERSION`, `UV_VERSION`, `LAZYDOCKER_VERSION`, `PREK_VERSION`). To bump a version, change the var — the `status:` checks (`mise current <tool> | grep …`) will then detect the mismatch and re-run `mise use -g`. Dependabot is configured (`.github/dependabot.yml`) for GitHub Actions and Go modules only; mise-managed versions are bumped manually.
+Tool versions live in `mise.toml` at the repo root, not in the Taskfile. To bump one, edit that file — `task mise:tools` compares each pin against `mise current <tool>` and re-runs `mise use -g` for the whole set on any mismatch. `mise use -g` merges into `~/.config/mise/config.toml`, so tools pinned there outside this repo survive the run.
+
+Two consequences of that layout:
+
+- `mise.toml` is a *reference* copy, not a symlink or a mirror of the global config. The global config may legitimately hold more than this file does.
+- Unpinned entries (`gh = "latest"`) can't be compared against a resolved version, so the `status:` check skips them; they are only refreshed when some other pin changes.
+
+Renovate's built-in `mise` manager parses `mise.toml` with no custom-manager config, which is why the pins live in that format. Only the first version listed per tool is updated, so don't add fallback versions. `.github/dependabot.yml` declares `github-actions` and `gomod`, but neither has any files to scan in this repo.
 
 ### Conventions
 

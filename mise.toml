@@ -1,0 +1,16 @@
+# Pinned tool versions for this workstation.
+#
+# `task mise:tools` reads this file and applies each pin globally with
+# `mise use -g`, which *merges* into ~/.config/mise/config.toml — tools
+# installed there outside this repo are left alone.
+#
+# Renovate's built-in `mise` manager parses this file directly, so bumps
+# arrive as PRs. Keep one version per tool: Renovate only updates the first
+# version listed for each.
+[tools]
+gh = "latest"
+go = "1.27.1"
+lazydocker = "0.25.2"
+prek = "0.5.2"
+python = "3.14.7"
+uv = "0.12.10"
