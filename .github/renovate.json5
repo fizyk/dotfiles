@@ -11,7 +11,7 @@
 
   packageRules: [
     {
-      // These six move together in practice, and every past bump here was a
+      // These move together in practice, and every past bump here was a
       // single "Update tool versions" commit. One PR keeps that shape.
       matchManagers: ["mise"],
       groupName: "tool versions",

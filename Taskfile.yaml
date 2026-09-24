@@ -25,6 +25,11 @@ tasks:
       - task: docker:config
       - task: mise:config
       - task: task:config
+  update:
+    desc: "Updates everything that doesn't update itself"
+    cmds:
+      - task: zsh:update
+      - task: atuin:update
   default:
     deps:
       [install]

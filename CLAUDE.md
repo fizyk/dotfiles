@@ -16,12 +16,14 @@ All commands run from the repo root via the `task` binary (must be installed fir
 - `task <ns>:install` / `task <ns>:config` — operate on one tool only, where `<ns>` is `git`, `zsh`, `docker`, `mise`, `atuin`, or `task`.
 - `task mise:tools` — install/pin the mise-managed runtimes (go, python, uv, prek, lazydocker) at the versions declared in `TaskfileMise.yaml` vars.
 - `task atuin:update` — update an already-installed atuin.
+- `task zsh:update` — fast-forward the powerlevel10k, zsh-syntax-highlighting and zsh-autosuggestions clones. oh-my-zsh's own updater only pulls `~/.oh-my-zsh`, so without this they stay at their clone-time commit. The `status:` check fetches and compares `HEAD` with `@{u}`, so up-to-date clones are skipped.
+- `task update` — run `zsh:update` and `atuin:update`. Everything else updates itself (oh-my-zsh), comes through apt/snap, or is pinned in `mise.toml`.
 
 Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `mise ls --installed <tool> | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
 
 ## Architecture
 
-The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile per tool and exposes only meta-targets (`install`, `config`, `default`). All real work lives in the per-tool files:
+The top-level `Taskfile.yaml` is a thin aggregator. It `includes:` one Taskfile per tool and exposes only meta-targets (`install`, `config`, `update`, `default`). All real work lives in the per-tool files:
 
 - `TaskfileGit.yaml` — adds the `git-core/ppa`, installs git, copies `.gitattributes` to `~/`, sets global aliases (`cleanup`, `cleanup-remote`) and config (default branch `main`, bitbucket SSH rewrite for Go).
 - `TaskfileZsh.yaml` — installs zsh + oh-my-zsh (unattended curl installer), then in `config` clones powerlevel10k, zsh-syntax-highlighting, and zsh-autosuggestions into `${ZSH_CUSTOM:-~/.oh-my-zsh/custom}` and switches the login shell. Nerd Font installation is left as a manual step (printed to stdout).
@@ -38,9 +40,9 @@ Tool versions live in `mise.toml` at the repo root, not in the Taskfile. To bump
 Two consequences of that layout:
 
 - `mise.toml` is a *reference* copy, not a symlink or a mirror of the global config. The global config may legitimately hold more than this file does.
-- Unpinned entries (`gh = "latest"`) can't be compared against a resolved version, so the `status:` check skips them; they are only refreshed when some other pin changes.
+- An unpinned entry (`<tool> = "latest"`; none today) can't be compared against a resolved version, so the `status:` check skips it; it is only refreshed when some other pin changes.
 
-Renovate's built-in `mise` manager parses `mise.toml` with no custom-manager config, which is why the pins live in that format. Only the first version listed per tool is updated, so don't add fallback versions. `.github/dependabot.yml` declares `github-actions` and `gomod`, but neither has any files to scan in this repo.
+Renovate's built-in `mise` manager parses `mise.toml` with no custom-manager config, which is why the pins live in that format. Only the first version listed per tool is updated, so don't add fallback versions. Renovate is meant to run through the Mend Renovate GitHub App, so there is no workflow file. Dependabot is not used: it has no ecosystem for `mise.toml`, and nothing else in the repo is pinned (the Taskfiles install from apt, snap, curl-piped installers and default-branch `git clone`s).
 
 ### Conventions
 

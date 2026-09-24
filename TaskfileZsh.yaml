@@ -37,6 +37,27 @@ tasks:
     cmds:
       - chsh -s $(which zsh)
       - echo "You'd need to log out and log in"
+  update:
+    desc: Update the theme and plugins cloned into ZSH_CUSTOM (oh-my-zsh updates itself)
+    cmds:
+      - task: git-pull
+        vars:
+          DIR: ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+      - task: git-pull
+        vars:
+          DIR: ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+      - task: git-pull
+        vars:
+          DIR: ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git-pull:
+    internal: true
+    cmds:
+      - git -C "{{.DIR}}" pull --ff-only
+    status:
+      - git -C "{{.DIR}}" fetch --quiet
+      - test "$(git -C "{{.DIR}}" rev-parse HEAD)" = "$(git -C "{{.DIR}}" rev-parse '@{u}')"
+    preconditions:
+      - test -d "{{.DIR}}/.git"
   powerlevel10k-install:
     internal: true
     cmds:
