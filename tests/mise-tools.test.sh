@@ -12,7 +12,7 @@ stub mise 'exit 0'
 
 # tools_cmd FILE: the `mise use -g ...` line mise:tools would run for FILE.
 tools_cmd() {
-    task --dir "$ROOT" --dry --force mise:tools MISE_FILE="$1" 2>&1 |
+    task --dir "$ROOT" --color=false --dry --force mise:tools MISE_FILE="$1" 2>&1 |
         sed -n 's/^task: \[mise:tools\] //p' | sed 's/ *$//'
 }
 

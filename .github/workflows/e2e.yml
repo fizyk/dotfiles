@@ -59,6 +59,7 @@ jobs:
       # (git config is cheap to reapply; the zsh part only prints a reminder).
       - name: Second run changes nothing
         run: |
+          set -o pipefail
           PATH="/snap/bin:$PATH"
           task install docker:config mise:config task:config mise:tools 2>&1 | tee rerun.log
           if grep -E '^task: \[' rerun.log; then
