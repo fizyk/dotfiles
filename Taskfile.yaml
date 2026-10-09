@@ -30,6 +30,18 @@ tasks:
     cmds:
       - task: zsh:update
       - task: atuin:update
+  lint:
+    desc: "Runs the pre-commit hooks over the whole repo"
+    cmds:
+      - prek run --all-files
+  test:
+    desc: "Runs tests/*.test.sh (no installs, nothing outside the repo is touched)"
+    cmds:
+      - for: { var: TESTS }
+        cmd: bash {{.ITEM}}
+    vars:
+      TESTS:
+        sh: ls tests/*.test.sh
   default:
     deps:
       [install]

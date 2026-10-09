@@ -9,7 +9,7 @@ includes:
 tasks:
   install:
     desc: Install Zsh and its dependencies
-    runs: once
+    run: once
     cmds:
       - task: deps:apt
         vars:
@@ -35,8 +35,14 @@ tasks:
       - zsh-autosuggestions
       - fonts
     cmds:
-      - chsh -s $(which zsh)
+      - task: login-shell
+  login-shell:
+    internal: true
+    cmds:
+      - sudo chsh -s "$(command -v zsh)" "$USER"
       - echo "You'd need to log out and log in"
+    status:
+      - 'test "$(getent passwd "$USER" | cut -d: -f7)" = "$(command -v zsh)"'
   update:
     desc: Update the theme and plugins cloned into ZSH_CUSTOM (oh-my-zsh updates itself)
     cmds:

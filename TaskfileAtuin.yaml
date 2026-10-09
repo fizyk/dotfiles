@@ -9,7 +9,7 @@ tasks:
     cmds:
       - curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
     preconditions:
-      - test -f "{{.ZSHRC_FILE}}"
+      - test -f "$HOME/.zshrc"
     status:
       - test -d ~/.atuin/bin
       - grep -Fq 'atuin' {{.ZSHRC_FILE}}

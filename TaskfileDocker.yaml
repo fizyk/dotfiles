@@ -51,7 +51,7 @@ tasks:
       - getent group docker
   add-user:
     internal: true
-    runs: once
+    run: once
     deps: [group]
     cmds:
       - sudo usermod -aG docker $USER

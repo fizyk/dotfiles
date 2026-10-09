@@ -38,7 +38,7 @@ tasks:
       TOOLS:
         sh: >-
           awk '/^\[tools\]/{f=1;next} /^\[/{f=0}
-          f&&/=/{gsub(/["[:space:]]/,"");split($0,a,"=");if(a[1]!="")printf "%s@%s ",a[1],a[2]}'
+          f{sub(/#.*/,"")} f&&/=/{gsub(/["[:space:]]/,"");split($0,a,"=");if(a[1]!="")printf "%s@%s ",a[1],a[2]}'
           {{.MISE_FILE}}
     cmds:
       - mise use -g {{.TOOLS}}

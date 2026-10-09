@@ -1,0 +1,46 @@
+# Run with `prek run --all-files` (or `task lint`). CI runs the same file.
+# Renovate bumps the `rev:`s below (pre-commit manager enabled in
+# .github/renovate.json5).
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.38.2
+    hooks:
+      - id: check-taskfile
+        # The stock pattern only matches Taskfile.yaml, not the per-tool files.
+        files: ^(tests/)?Taskfile[A-Za-z]*\.yaml$
+      - id: check-renovate
+        additional_dependencies: [json5]
+      - id: check-github-workflows
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.11.1
+    hooks:
+      - id: editorconfig-checker
+
+  - repo: local
+    hooks:
+      # Loads every Taskfile and resolves all includes and templates.
+      - id: task-list
+        name: Taskfiles load
+        entry: task --list-all
+        language: system
+        files: ^(tests/)?Taskfile.*\.yaml$
+        pass_filenames: false
