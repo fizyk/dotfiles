@@ -19,7 +19,7 @@ All commands run from the repo root via the `task` binary (must be installed fir
 - `task zsh:update` — fast-forward the powerlevel10k, zsh-syntax-highlighting and zsh-autosuggestions clones. oh-my-zsh's own updater only pulls `~/.oh-my-zsh`, so without this they stay at their clone-time commit. The `status:` check fetches and compares `HEAD` with `@{u}`, so up-to-date clones are skipped.
 - `task update` — run `zsh:update` and `atuin:update`. Everything else updates itself (oh-my-zsh), comes through apt/snap, or is pinned in `mise.toml`.
 - `task test` — run `tests/*.test.sh`. They exercise task logic (the `mise:tools` awk parser, the `deps:apt` status regex) through `task --dry` with stub binaries on `PATH`, so nothing is installed and nothing outside the repo is touched.
-- `task lint` — `prek run --all-files` over `.pre-commit-config.yaml`: Taskfile/Renovate/workflow schema validation, actionlint, shellcheck, editorconfig-checker, and a `task --list-all` load check.
+- `task lint` — `prek run --all-files` over `prek.toml`: Taskfile/Renovate/workflow schema validation, actionlint, shellcheck and editorconfig-checker. Hooks must not need `task` or anything else outside prek's own environments, because CI runs them through a shared workflow that installs only prek.
 
 Tasks are idempotent: each defines `status:` / `preconditions:` checks (e.g. `dpkg --get-selections | grep …`, `test -d …`, `mise ls --installed <tool> | grep …`) so re-running skips work that's already done. When editing or adding tasks, preserve this property — add a `status:` check that detects the post-condition rather than relying on the command itself being safe to re-run.
 
@@ -44,11 +44,12 @@ Two consequences of that layout:
 - `mise.toml` is a *reference* copy, not a symlink or a mirror of the global config. The global config may legitimately hold more than this file does.
 - An unpinned entry (`<tool> = "latest"`; none today) can't be compared against a resolved version, so the `status:` check skips it; it is only refreshed when some other pin changes.
 
-Renovate's built-in `mise` manager parses `mise.toml` with no custom-manager config, which is why the pins live in that format. Only the first version listed per tool is updated, so don't add fallback versions. Renovate is meant to run through the Mend Renovate GitHub App, so there is no Renovate workflow file. Besides `mise.toml` it also bumps the action versions in `.github/workflows/` and the hook `rev:`s in `.pre-commit-config.yaml`. Dependabot is not used: it has no ecosystem for `mise.toml`. The Taskfiles themselves pin nothing (they install from apt, snap, curl-piped installers and default-branch `git clone`s).
+Renovate's built-in `mise` manager parses `mise.toml` with no custom-manager config, which is why the pins live in that format. Only the first version listed per tool is updated, so don't add fallback versions. Renovate is meant to run through the Mend Renovate GitHub App, so there is no Renovate workflow file. Besides `mise.toml` it also bumps the action versions in `.github/workflows/` and the hook `rev`s in `prek.toml`. Renovate has no prek manager and its `pre-commit` manager only reads `.pre-commit-config.yaml`, so `prek.toml` is covered by a regex custom manager that expects each `rev =` line directly under its `repo =` line. Dependabot is not used: it has no ecosystem for `mise.toml`. The Taskfiles themselves pin nothing (they install from apt, snap, curl-piped installers and default-branch `git clone`s).
 
 ### CI
 
-- `.github/workflows/ci.yml` — `lint` (prek) and `test` (`task test`) on every push to `main` and every PR.
+- `.github/workflows/pre-commit.yml` — runs `prek.toml` through `fizyk/actions-reuse`'s `shared-pre-commit.yml` (pinned by SHA), the same workflow as the author's other packages.
+- `.github/workflows/ci.yml` — `task test` on every push to `main` and every PR.
 - `.github/workflows/e2e.yml` — on PRs, weekly, and on demand: runs `task install`, `task config` and `task mise:tools` on a fresh `ubuntu-24.04` runner, smoke-tests the result, then re-runs the tasks that have `status:` checks and fails if any of them printed a `task: [name] …` line (that is, ran a command again). A task you add with a `status:` belongs in that re-run list.
 
 ### Conventions

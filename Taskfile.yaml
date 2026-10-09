@@ -31,7 +31,7 @@ tasks:
       - task: zsh:update
       - task: atuin:update
   lint:
-    desc: "Runs the pre-commit hooks over the whole repo"
+    desc: "Runs the prek hooks (prek.toml) over the whole repo"
     cmds:
       - prek run --all-files
   test:

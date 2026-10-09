@@ -3,10 +3,20 @@
   extends: ["config:recommended"],
 
   // mise.toml and the workflows under .github/workflows are picked up by the
-  // built-in `mise` and `github-actions` managers with no configuration. The
-  // `pre-commit` manager is opt-in, so it is switched on for the hook revs in
-  // .pre-commit-config.yaml.
-  "pre-commit": { enabled: true },
+  // built-in `mise` and `github-actions` managers with no configuration.
+  // Renovate has no manager for prek.toml (its `pre-commit` one only reads
+  // .pre-commit-config.yaml), so the hook `rev`s get a regex manager.
+  customManagers: [
+    {
+      customType: "regex",
+      managerFilePatterns: ["/(^|/)prek\\.toml$/"],
+      matchStrings: [
+        'repo = "https://github\\.com/(?<depName>[^/"]+/[^/"]+)"\\s*\\nrev = "(?<currentValue>[^"]+)"',
+      ],
+      datasourceTemplate: "github-tags",
+      depTypeTemplate: "prek",
+    },
+  ],
 
   timezone: "Europe/Warsaw",
   schedule: ["before 6am on monday"],
