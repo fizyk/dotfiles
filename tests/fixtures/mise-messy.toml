@@ -1,0 +1,16 @@
+# A comment before any table, with an = sign = in it.
+min_version = "2024.1.1"
+
+[env]
+FOO = "not a tool"
+
+[tools]
+# go = "0.0.0"  a commented-out pin must not be picked up
+go = "1.2.3"
+
+python   =   "3.14.0"   # trailing comment
+"aqua:jesseduffield/lazydocker" = "0.25.2"
+node = "latest"
+
+[settings]
+experimental = true

@@ -11,4 +11,3 @@ Personal dotfiles and system tools installation scripts
 2. See available tasks:
 
    task --list-all
-

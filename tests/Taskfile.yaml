@@ -1,0 +1,13 @@
+# Wraps internal helpers so tests/*.test.sh can reach them: an internal task
+# can't be run from the command line, only called from another task.
+version: '3'
+
+includes:
+  deps: ../TaskfileDeps.yaml
+
+tasks:
+  apt:
+    cmds:
+      - task: deps:apt
+        vars:
+          DEP: '{{.DEP}}'

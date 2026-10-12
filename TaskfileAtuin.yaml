@@ -7,9 +7,15 @@ vars:
 tasks:
   install:
     cmds:
-      - curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+      # Without a controlling terminal (CI, ssh without -t) setup.atuin.sh's
+      # /dev/tty probe kills it with exit 2 and no output; --non-interactive
+      # skips that probe and the history import/sync prompts.
+      - |
+        ARGS=""
+        (: </dev/tty) 2>/dev/null || ARGS="--non-interactive"
+        curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- $ARGS
     preconditions:
-      - test -f "{{.ZSHRC_FILE}}"
+      - test -f "$HOME/.zshrc"
     status:
       - test -d ~/.atuin/bin
       - grep -Fq 'atuin' {{.ZSHRC_FILE}}

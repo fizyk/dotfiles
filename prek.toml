@@ -1,0 +1,41 @@
+# Run with `prek run --all-files` (or `task lint`). CI runs the same file
+# through fizyk/actions-reuse's shared pre-commit workflow.
+# Renovate bumps the `rev`s below through a custom manager in
+# .github/renovate.json5 (its own `pre-commit` manager only reads
+# .pre-commit-config.yaml).
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v6.0.0"
+hooks = [
+  { id = "check-yaml" },
+  { id = "check-merge-conflict" },
+  { id = "end-of-file-fixer" },
+  { id = "trailing-whitespace" },
+]
+
+[[repos]]
+repo = "https://github.com/python-jsonschema/check-jsonschema"
+rev = "0.38.2"
+hooks = [
+  # The stock pattern only matches Taskfile.yaml, not the per-tool files.
+  { id = "check-taskfile", files = '^(tests/)?Taskfile[A-Za-z]*\.yaml$' },
+  { id = "check-renovate", additional_dependencies = ["json5"] },
+  { id = "check-github-workflows" },
+]
+
+[[repos]]
+repo = "https://github.com/kjanat/actionlint"
+rev = "v1.17.0"
+hooks = [{ id = "actionlint" }]
+
+[[repos]]
+repo = "https://github.com/shellcheck-py/shellcheck-py"
+rev = "v0.11.0.1"
+hooks = [{ id = "shellcheck" }]
+
+[[repos]]
+repo = "https://github.com/editorconfig-checker/editorconfig-checker.python"
+rev = "3.11.1"
+hooks = [{ id = "editorconfig-checker" }]
