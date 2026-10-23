@@ -7,6 +7,7 @@ includes:
   mise: TaskfileMise.yaml
   atuin: TaskfileAtuin.yaml
   task: TaskfileTask.yaml
+  claude: TaskfileClaude.yaml
 
 tasks:
   install:
@@ -25,6 +26,7 @@ tasks:
       - task: docker:config
       - task: mise:config
       - task: task:config
+      - task: claude:config
   update:
     desc: "Updates everything that doesn't update itself"
     cmds:

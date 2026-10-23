@@ -1,0 +1,19 @@
+# Claude Code (https://claude.com/claude-code) personal rules and skills
+version: '3'
+
+vars:
+  CLAUDE_CONFIG: "{{.TASKFILE_DIR}}/claude-config"
+
+tasks:
+  config:
+    desc: Symlink claude-config/ rules and skills into ~/.claude
+    cmds:
+      - "{{.CLAUDE_CONFIG}}/install.sh"
+    status:
+      - |
+        claude_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+        test "$(readlink "$claude_dir/CLAUDE.md")" = "{{.CLAUDE_CONFIG}}/CLAUDE.md" || exit 1
+        for skill in "{{.CLAUDE_CONFIG}}"/skills/*/; do
+          skill="${skill%/}"
+          test "$(readlink "$claude_dir/skills/${skill##*/}")" = "$skill" || exit 1
+        done
