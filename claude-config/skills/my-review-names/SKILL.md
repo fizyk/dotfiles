@@ -24,8 +24,9 @@ so and ask for one that resolves.
 **`$ARGUMENTS` is empty:** take the default branch from `git rev-parse
 --abbrev-ref origin/HEAD`, falling back to `git branch --list
 --format='%(refname:short)' main` - the plain listing pads the name with the
-marker column, which no ref resolves through. Name the base ref at the top of
-the report so the reader can correct it.
+marker column, which no ref resolves through. Where neither returns a ref,
+stop and ask for one. Name the base ref at the top of the report so the reader
+can correct it.
 
 Then read four sources:
 
@@ -57,8 +58,8 @@ undeclared component is reported below.
 
 Read, in this order. A later source wins where two disagree.
 
-1. `~/.claude/CLAUDE.md`, "Naming". The personal defaults, true of every
-   repository.
+1. The global `CLAUDE.md` (in `$CLAUDE_CONFIG_DIR`, or `~/.claude` where that is
+   unset), "Naming". The personal defaults, true of every repository.
 2. The repository's own rules: the root `CLAUDE.md` or `AGENTS.md`, and the
    naming section of `CONTRIBUTING.md` where there is one.
 3. The `CLAUDE.md` of each component the diff touches, outermost first where
@@ -84,7 +85,7 @@ A component in a repository that does declare components, and has declared
 nothing itself, is not a reason to stop. The root rules are language-neutral
 and still apply. What it does mean:
 
-* No exemption is honored, so a root rule that the component's stack
+* No exemption is honoured, so a root rule that the component's stack
   contradicts fires as a finding against the whole stack rather than once.
 * No abbreviation layer is declared, so every short form is a finding.
 
@@ -167,7 +168,9 @@ A call comes under this check from either side:
 * **The callee.** A function the diff adds, or whose signature it changes.
   `grep` its name across the component. Where that turns up an aliased import,
   grep the alias as well before calling the call sites covered: that import
-  line is the only place the two names meet.
+  line is the only place the two names meet. A match is only a candidate: keep
+  it where its module, imports, or receiver's type resolve it to this function,
+  since another one can share the name.
 * **The caller.** A call site whose argument expressions the diff changes, even
   where the callee and its signature are untouched. The diff already names it;
   read the callee's signature to bind against. This is the half a rename most

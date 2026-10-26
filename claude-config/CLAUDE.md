@@ -33,6 +33,8 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
 * **Match the surrounding code**: its naming, idiom, and comment density.
 * **Line width comes from the linter configs.** Where two disagree, say so and
   use the strictest. With none configured, use 88, Markdown included.
+* **A skill's frontmatter `description` stays on one line**, whatever its
+  length.
 * **Plain verbs over jargon** (`generate`, `create`, not `mint`, `hydrate`).
 * **Reject input that would be ignored or contradicts other input.** Fail
   instead of computing and warning.
@@ -62,7 +64,7 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
 Text that leaves the process: API descriptions, tool descriptions, error
 bodies, exception and log messages.
 
-* **Full sentences.** Capitalized, terminal period. A title or label is not
+* **Full sentences.** Capitalised, terminal period. A title or label is not
   prose.
 * **Expand an abbreviation on first use** in each text.
 * **A description says what the value is**, with its unit. Not how it is
@@ -96,8 +98,8 @@ bodies, exception and log messages.
 * **One source of truth.** Point to the canonical file instead of copying it.
 * **`CLAUDE.md` is for the agent, `README.md` for the human.** Place a rule by
   who acts on it.
-* **`CLAUDE.md` bullets are bare directives.** No citations, examples, or
-  what-if clauses.
+* **`CLAUDE.md` bullets are bare directives.** No citations or what-if
+  clauses. An example only where the rule is unclear without it.
 * **A rule that applies once lives with the artifact it constrains**, not in
   `CLAUDE.md`.
 * **State a policy directly.** No "this is X, not a workaround" framing.

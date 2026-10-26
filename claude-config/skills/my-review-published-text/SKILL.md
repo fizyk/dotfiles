@@ -43,8 +43,9 @@ so and ask for one that resolves.
 **`$ARGUMENTS` is empty:** take the default branch from `git rev-parse
 --abbrev-ref origin/HEAD`, falling back to `git branch --list
 --format='%(refname:short)' main` - the plain listing pads the name with the
-marker column, which no ref resolves through. Name the base ref at the top of
-the report so the reader can correct it.
+marker column, which no ref resolves through. Where neither returns a ref,
+stop and ask for one. Name the base ref at the top of the report so the reader
+can correct it.
 
 A diff run reads four sources:
 
@@ -76,8 +77,8 @@ undeclared component is reported below.
 
 Read, in this order. A later source wins where two disagree.
 
-1. `~/.claude/CLAUDE.md`, "Published text". The personal defaults, true of
-   every repository.
+1. The global `CLAUDE.md` (in `$CLAUDE_CONFIG_DIR`, or `~/.claude` where that is
+   unset), "Published text". The personal defaults, true of every repository.
 2. The repository's own rules: the root `CLAUDE.md` or `AGENTS.md`, and
    `CONTRIBUTING.md` where there is one.
 3. The `CLAUDE.md` of each component the diff touches, outermost first where
@@ -159,7 +160,7 @@ check returns a finding or nothing.
 
 ### Sentence shape
 
-A complete sentence, capitalized first word, terminal period. A noun fragment
+A complete sentence, capitalised first word, terminal period. A noun fragment
 (`Number of retries before failing`) is a finding; propose the sentence it was
 shortened from.
 

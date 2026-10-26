@@ -8,9 +8,10 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git diff *), Bash(git log *),
 
 The procedure is portable, the glossary is not: what lands in the glossary is
 this repository's own vocabulary, and another repository running this skill
-generates its own. What makes a name a good one is under "Naming" in
-`~/.claude/CLAUDE.md` and the repository's own rules - read it there rather
-than a second copy here.
+generates its own. What makes a name a good one is under "Naming" in the
+global `CLAUDE.md` (in `$CLAUDE_CONFIG_DIR`, or `~/.claude` where that is
+unset) and the repository's own rules - read it there rather than a second
+copy here.
 
 **The glossary** is the file the repository's rules name. Where none is named,
 look for a `glossary.md` under `docs/`. Where none exists, propose
@@ -29,7 +30,7 @@ for is the difference, not the file.
 
 ## 2. Resolve the sources
 
-Read `~/.claude/CLAUDE.md`, the repository's root `CLAUDE.md` or `AGENTS.md`,
+Read the global `CLAUDE.md`, the repository's root `CLAUDE.md` or `AGENTS.md`,
 then the `CLAUDE.md` of every component. A component's own file names the
 surfaces it publishes and the layers it spells terms out in, and those
 surfaces are what this skill harvests. **Use `Read`, not `cat`.** A

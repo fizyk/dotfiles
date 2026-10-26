@@ -120,9 +120,10 @@ decidable, which belongs in a later record or nowhere yet.
 ### Then section ownership
 
 For each section, the question is only whether its content belongs to it. Take
-the ownership rules from the conventions page; the ones that find the most are
-mechanism in the Decision, a verdict inside an option body, a referenced
-document summarized rather than linked, and a deferral written as a force.
+the ownership rules from the conventions page. The most common findings are a
+mechanism described in the Decision, a verdict inside an option body, a
+referenced document summarised rather than linked, and a deferral written as a
+force.
 
 ### Then duplication
 

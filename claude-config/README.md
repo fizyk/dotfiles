@@ -33,9 +33,14 @@ A personal skill wins over a project skill with the same name, so every skill
 here carries the `my-` prefix. A repository's own `awsome-skill` keeps running
 as its team wrote it, and `my-awsome-skill` stays callable beside it.
 For a repository you do not own, put personal additions in
-`CLAUDE.local.md`, which stays out of git.
+`CLAUDE.local.md` and list it in `.git/info/exclude`, which keeps it out of git
+without changing the repository's `.gitignore`.
 
 ## Other agents
 
 Agents that read `AGENTS.md` (Codex, Cursor and others) can share the same
-rules through a symlink, for example `~/.codex/AGENTS.md -> CLAUDE.md`.
+rules through a symlink. For Codex, from this directory:
+
+```shell
+ln -s "$PWD/CLAUDE.md" ~/.codex/AGENTS.md
+```

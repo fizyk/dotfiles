@@ -19,7 +19,8 @@ what stays out of one, and the review checks.
   does not move it.
 * A record that is reversed or replaced stays in place, marked Deprecated or
   Superseded, with a link to the record that replaces it and a link back.
-* A record whose decision has shipped and held is Accepted, whatever it still says.
+* A record whose decision shipped through review by its owners and held is
+  Accepted, whatever it still says.
 
 ## When to write one
 
