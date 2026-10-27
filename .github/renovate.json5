@@ -18,8 +18,11 @@
     },
   ],
 
+  // Mend runs each repository only every few hours, so a weekly window was
+  // missed for weeks at a time. A daily one gets several chances.
   timezone: "Europe/Warsaw",
-  schedule: ["before 6am on monday"],
+  schedule: ["before 7am"],
+  minimumReleaseAge: "7 days",
 
   packageRules: [
     {
