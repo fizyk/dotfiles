@@ -50,6 +50,7 @@ jobs:
           grep -Fq 'mise activate zsh' ~/.zshrc
           grep -Fq 'task --completion zsh' ~/.zshrc
           test -x ~/.atuin/bin/atuin
+          test -L ~/.claude/CLAUDE.md
           mise ls --installed
 
       # Task prints `task: [name] cmd` for every command it runs and
@@ -61,7 +62,7 @@ jobs:
         run: |
           set -o pipefail
           PATH="/snap/bin:$PATH"
-          task install docker:config mise:config task:config mise:tools 2>&1 | tee rerun.log
+          task install docker:config mise:config task:config claude:config mise:tools 2>&1 | tee rerun.log
           if grep -E '^task: \[' rerun.log; then
             echo "::error::The tasks above ran again on an already-provisioned machine"
             exit 1
