@@ -8,8 +8,8 @@
 # arrive as PRs. Keep one version per tool: Renovate only updates the first
 # version listed for each.
 [tools]
-go = "1.27.1"
+go = "1.27.3"
 lazydocker = "0.25.2"
-prek = "0.5.2"
-python = "3.14.7"
-uv = "0.12.10"
+prek = "0.5.7"
+python = "3.15.0"
+uv = "0.13.4"
