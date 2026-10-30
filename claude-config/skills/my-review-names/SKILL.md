@@ -1,6 +1,6 @@
 ---
 name: my-review-names
-description: Review the identifier names a diff introduces against the naming rules - abbreviation level, a type in the name, a parameter that disagrees with its call site, plain English and the repository's spelling variant, a comment standing in for a name or restating the code beside it, and the documentation of a published library's public API or, where the repository asks for one, the defining comment. Resolves the rules from the personal CLAUDE.md, the repository's own instructions and each component's. $ARGUMENTS optionally names the base ref. Use when the user asks to review naming, check the names on a branch, or check names before a pull request.
+description: Review the identifier names a diff introduces against the naming rules - abbreviation level, a type in the name, a parameter that disagrees with its call site, plain English and the repository's spelling variant, the casing of an acronym the rules allow, a comment standing in for a name or restating the code beside it, and the documentation of a published library's public API or, where the repository asks for one, the defining comment. Resolves the rules from the personal CLAUDE.md, the repository's own instructions and each component's. $ARGUMENTS optionally names the base ref. Use when the user asks to review naming, check the names on a branch, or check names before a pull request.
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git status *), Bash(git branch *), Bash(git show *), Bash(git rev-parse *)
 ---
 
@@ -115,7 +115,7 @@ and lint or type-checker directives are not comments here.
 
 ## 4. Run the checks
 
-Run the first five against every name and the sixth against the comments
+Run the first six against every name and the seventh against the comments
 section 3 collects. A check returns a finding or nothing.
 
 ### Abbreviation level
@@ -215,6 +215,23 @@ there a more common English word that fits as well? Is the spelling the
 repository's variant? Report the name with the plainer word, or the other
 spelling, as the proposal.
 
+### Acronym casing
+
+An acronym in a class or type name can be title-cased (`HttpClient`) or written
+in capitals (`HTTPClient`). Which one applies, and to which names, is the
+"Naming" rule that wins among the files section 2 resolves. Apply that rule as
+it reads.
+
+Whether a term may be shortened at all is the abbreviation level's question.
+This check takes only the acronyms that one lets through and asks how they are
+capitalised. A short form already reported there gets no second row here.
+
+**Where no rule is resolved**, this check cannot run. Do not infer one from the
+names already in the repository. Report the check as unchecked, never as clean.
+
+For each name the rule covers, report an acronym cased against it, and propose
+the name recased.
+
 ### The defining comment
 
 Which rule holds depends on what the thing is.
@@ -275,7 +292,8 @@ it, or removal. Mark a provisional finding, from a component that declared no ru
 as such.
 
 Under each table, one line per check that found nothing, so a clean check reads
-differently from a skipped one.
+differently from a skipped one. Acronym casing with no rule resolved gets an
+"unchecked" line, never a clean one.
 
 Close with two counts, kept apart: the findings, and the components that
 declared no rules. The second is the more useful number on a first run, and

@@ -51,6 +51,8 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
   identifiers, comments, and in-repo docs. A new repository uses UK English.
 * **Spell terms out.** A short form is fine only where the project already
   uses it.
+* **An acronym in a class or type name stays in capitals** (`HTTPClient`, not
+  `HttpClient`).
 * **No type or shape in a name** (`_dict`, `_list`, `_str`). A unit is not a
   type (`_days`, `_count`).
 * **Name a class for its role, not its pattern.** `Manager`, `Factory`,
