@@ -78,6 +78,9 @@ bodies, exception and log messages.
 * **An exception message names the failure and what would fix it.**
 * **A value set written into prose is a copy of an enum.** Change both
   together.
+* **A sentence wrapped across string literals breaks at its punctuation.**
+  Split after a `;` or `:`, and mid-clause only where one clause does not fit
+  the line.
 
 ## Tests
 

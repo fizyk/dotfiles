@@ -125,8 +125,9 @@ link.
    * **Contradiction** - an identifier used in a way the entry's definition does
      not cover. Report the entry and the use.
    * **Consistent** - no report.
-3. A term whose last use the diff removes is a report, not an edit. The entry
-   stays until someone confirms the term is gone.
+3. A term whose last use the diff removes is a **removed term**: propose
+   dropping its entry, with the `file:line` that held its last use. The diff
+   and the git history keep the record, so the glossary does not.
 
 ## 6. Report
 

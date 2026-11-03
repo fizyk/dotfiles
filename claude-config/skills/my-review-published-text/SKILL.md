@@ -172,7 +172,10 @@ in its own `CLAUDE.md`; absent that, judge by whether the string is a sentence
 in the interface or a word on a button.
 
 A message built from adjacent string literals is one sentence. Judge the joined
-text, and check each join keeps the space the wrapping dropped.
+text, and check each join keeps the space the wrapping dropped. Then check where
+each join falls: one landing mid-clause, where a split after the nearest `;` or
+`:` would fit the line, is a finding. Propose the literals re-wrapped at that
+punctuation.
 
 ### Vocabulary
 
