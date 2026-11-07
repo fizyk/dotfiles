@@ -24,6 +24,10 @@
   schedule: ["before 7am"],
   minimumReleaseAge: "7 days",
 
+  // fizyk/actions-reuse's automerge action arms a Renovate pull request only
+  // when its commit body names a minor, patch or similar update type.
+  commitBody: "Update-Type: {{updateType}}",
+
   packageRules: [
     {
       // These move together in practice, and every past bump here was a
