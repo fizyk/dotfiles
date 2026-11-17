@@ -81,8 +81,10 @@ Group the terms by the area they belong to, and give each one a row:
   an abbreviation is confined to one layer, name both and say which is which.
   Where two components spell one term differently, this is the column that
   settles it.
-* **Where defined** - the path that carries the definition, and the symbol
-  inside it.
+* **Where defined** - the root definition: the one path and symbol the concept
+  comes from. Identifiers that build on it or reuse it elsewhere are not
+  listed. A term defined independently in two places keeps one path per
+  definition.
 
 Two things deserve their own section at the end, because they are what a
 reviewer needs and a table of terms hides:
