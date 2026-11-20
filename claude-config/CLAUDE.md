@@ -27,6 +27,8 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
 * **Offer a commit or a push in one line** when it looks like the next step,
   then wait.
 * **Read-only git is always fine**: `status`, `diff`, `log`, `show`, `blame`.
+* **Keep commit messages concise.** Fold related points into one sentence;
+  cut words, not points.
 
 ## Code
 
