@@ -17,6 +17,8 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
 
 ## Git
 
+In a local session, where I see the working tree:
+
 * **I own history.** Never commit, amend, push, tag, reset, rebase, or run
   anything else that writes history or moves refs unless asked in so many
   words in the current turn.
@@ -26,6 +28,18 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
   tool needs staged files, such as pre-commit hooks, unstage afterwards.
 * **Offer a commit or a push in one line** when it looks like the next step,
   then wait.
+
+In a remote session, such as one I direct from claude.ai, where I review
+through pull requests:
+
+* **Commit and push without asking.**
+* **Never force-push a branch under review.** Add commits on top. A branch
+  nobody has reviewed yet may be rebased.
+
+Everywhere:
+
+* **A session started by automation follows that automation's rules** for
+  history.
 * **Fold supporting detail in a pull request description.** Put decisions,
   reasoning and long lists in a `<details>` block with a `<summary>` line, so the
   description opens on what changed.
