@@ -26,6 +26,9 @@ Personal defaults for every repository. A repository's own `CLAUDE.md`,
   tool needs staged files, such as pre-commit hooks, unstage afterwards.
 * **Offer a commit or a push in one line** when it looks like the next step,
   then wait.
+* **Fold supporting detail in a pull request description.** Put decisions,
+  reasoning and long lists in a `<details>` block with a `<summary>` line, so the
+  description opens on what changed.
 * **Read-only git is always fine**: `status`, `diff`, `log`, `show`, `blame`.
 * **Keep commit messages concise.** Fold related points into one sentence;
   cut words, not points.
