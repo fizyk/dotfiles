@@ -35,6 +35,9 @@ through pull requests:
 * **Commit and push without asking.**
 * **Never force-push a branch under review.** Add commits on top. A branch
   nobody has reviewed yet may be rebased.
+* **Anything else that rewrites history or moves refs needs asking** in so
+  many words in the current turn: `reset`, tags, deleting branches, merging
+  pull requests.
 
 Everywhere:
 
