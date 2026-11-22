@@ -116,6 +116,8 @@ bodies, exception and log messages.
   value).
 * **Mock doubles carry a spec** and a `_mock` suffix, never a `fake_` prefix.
 * **Test the integration that consumes settings**, not the settings mechanism.
+* **`conftest.py` holds fixtures only.** Helpers and builders go in a plain module
+  the tests import.
 
 ## Docs
 
