@@ -98,6 +98,9 @@ bodies, exception and log messages.
 * **A log message names what happened.** Variable data goes in structured
   fields, not the message.
 * **An exception message names the failure and what would fix it.**
+* **An exception owns its message.** Build it in a named constructor on the class,
+  such as `ConfigurationError.from_missing_name(name=name)`, keeping the values as
+  attributes, so raisers and tests don't repeat the wording.
 * **A value set written into prose is a copy of an enum.** Change both
   together.
 * **A sentence wrapped across string literals breaks at its punctuation.**
@@ -116,8 +119,8 @@ bodies, exception and log messages.
   value).
 * **Mock doubles carry a spec** and a `_mock` suffix, never a `fake_` prefix.
 * **Test the integration that consumes settings**, not the settings mechanism.
-* **`conftest.py` holds fixtures only.** Helpers and builders go in a plain module
-  the tests import.
+* **`conftest.py` holds fixtures and pytest hooks only.** Helpers and builders go
+  in a plain module the tests import.
 
 ## Docs
 
