@@ -82,6 +82,8 @@ Everywhere:
 * **A parameter carries the name of what the call site passes it.**
 * **A comment is not a name.** Where a comment says what a value or block
   holds, rename or extract instead. Drop a comment that restates the code.
+* **A docstring or comment says what and why, not how.** Walk through the
+  implementation only where the algorithm is complex.
 
 ### Published text
 
